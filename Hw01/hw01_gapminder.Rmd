@@ -1,5 +1,27 @@
 ---
 title: "hw01_gapminder"
-output: html_document
+output: github_document
 ---
+
+```{r load, warning=FALSE,echo=FALSE}
+library(tibble) 
+library(gapminder)
+library(DT)
+```
+### A basic look at the gapminder rows and columns
+```{r}
+gpmd <- gapminder
+ ncol(gpmd) # number of columns 
+ nrow(gpmd) # number of rows 
+colnames(gpmd) # column names 
+```
+### Let's learn more about the contents of the data
+```{r}
+range(gpmd$year) # range of years included 
+str(gpmd) #basic summary of data structure
+sum(nlevels(gpmd$country)) # number of countries
+aggregate(gdpPercap~continent,gpmd,mean) #average gdp per Capita for each continent of all years
+aggregate(lifeExp~continent,gpmd,mean) #average life expectancy for the different continents as an aggregate of years
+gpmd$country[max(gpmd$lifeExp)]
+```
 
