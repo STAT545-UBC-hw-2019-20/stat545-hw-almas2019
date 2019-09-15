@@ -77,8 +77,15 @@ range(gpmd$lifeExp) #What are the ranges of life-expectancies?
     ## [1] 23.599 82.603
 
 ``` r
-gpmd$country[min(gpmd$lifeExp)] #Which country has the highest life expectancy?
+gpmd$country[max(gpmd$lifeExp)] #Which country had the highest life expectancy?
 ```
 
-    ## [1] Albania
+    ## [1] Austria
+    ## 142 Levels: Afghanistan Albania Algeria Angola Argentina ... Zimbabwe
+
+``` r
+gpmd$country[max(gpmd$lifeExp)] #Which country had the lowest life expectancy?
+```
+
+    ## [1] Austria
     ## 142 Levels: Afghanistan Albania Algeria Angola Argentina ... Zimbabwe
