@@ -1,48 +1,48 @@
 ---
-title: "hw01_gapminder"
-output: github_document
+title: "Homework 1_Gapminder Exploration Presentation"
+output: ioslides_presentation
 ---
 
 ```{r load, warning=FALSE,echo=FALSE}
 library(tibble) 
 library(gapminder)
 ```
-### A basic look at the gapminder rows and columns
+## A basic look at the gapminder rows and columns {.smaller}
 ```{r}
 gpmd <- gapminder
  ncol(gpmd) # number of columns 
  nrow(gpmd) # number of rows 
 colnames(gpmd) # column names 
 ```
-### Let's learn more about the structure of the data
+## Let's learn more about the structure of the data {.smaller}
 ```{r}
 str(gpmd,strict.width="wrap") #basic summary of data structure
 ```
-### The range of years included in the data are:
+## The range of years included in the data are:
 ```{r}
 range(gpmd$year) 
 ```
-### How many countries are there in the dataset:
+## How many countries are there in the dataset:
 ```{r}
 sum(nlevels(gpmd$country))
 ```
-## Let's explore life-expectancies from the dataset a bit:
+# Let's explore life-expectancies from the dataset a bit:
 
-### What are the ranges of life expectancies?
+## What are the ranges of life expectancies?
 ```{r}
 range(gpmd$lifeExp)
 ```
-### Which countries have the highest and lowest life-expectancies?
+## Which countries have the highest and lowest life-expectancies?
 ```{r}
 gpmd$country[max(gpmd$lifeExp)] #highest
 gpmd$country[min(gpmd$lifeExp)] #lowest
 ```
 
-### Average Life expectancy per continent:
+## Average Life expectancy per continent:
 ```{r}
 aggregate(lifeExp~continent,gpmd,mean) #includes all years
 ```
-## Let's learn about the median GDP per capita for each continent:
+## Let's learn about the median GDP per capita for each continent
 ```{r}
 aggregate(gdpPercap~continent,gpmd,median) #includes all years
 ```

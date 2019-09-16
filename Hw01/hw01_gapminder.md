@@ -25,16 +25,18 @@ colnames(gpmd) # column names
 ### Let's learn more about the structure of the data
 
 ``` r
-str(gpmd) #basic summary of data structure
+str(gpmd,strict.width="wrap") #basic summary of data structure
 ```
 
     ## Classes 'tbl_df', 'tbl' and 'data.frame':    1704 obs. of  6 variables:
-    ##  $ country  : Factor w/ 142 levels "Afghanistan",..: 1 1 1 1 1 1 1 1 1 1 ...
-    ##  $ continent: Factor w/ 5 levels "Africa","Americas",..: 3 3 3 3 3 3 3 3 3 3 ...
-    ##  $ year     : int  1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...
-    ##  $ lifeExp  : num  28.8 30.3 32 34 36.1 ...
-    ##  $ pop      : int  8425333 9240934 10267083 11537966 13079460 14880372 12881816 13867957 16317921 22227415 ...
-    ##  $ gdpPercap: num  779 821 853 836 740 ...
+    ## $ country : Factor w/ 142 levels "Afghanistan",..: 1 1 1 1 1 1 1 1 1 1 ...
+    ## $ continent: Factor w/ 5 levels "Africa","Americas",..: 3 3 3 3 3 3 3 3 3
+    ##    3 ...
+    ## $ year : int 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 ...
+    ## $ lifeExp : num 28.8 30.3 32 34 36.1 ...
+    ## $ pop : int 8425333 9240934 10267083 11537966 13079460 14880372 12881816
+    ##    13867957 16317921 22227415 ...
+    ## $ gdpPercap: num 779 821 853 836 740 ...
 
 ### The range of years included in the data are:
 
@@ -92,16 +94,16 @@ aggregate(lifeExp~continent,gpmd,mean) #includes all years
     ## 4    Europe 71.90369
     ## 5   Oceania 74.32621
 
-Let's learn about the mean GDP per capita for each continent
-------------------------------------------------------------
+Let's learn about the median GDP per capita for each continent:
+---------------------------------------------------------------
 
 ``` r
-aggregate(gdpPercap~continent,gpmd,mean) #includes all years
+aggregate(gdpPercap~continent,gpmd,median) #includes all years
 ```
 
     ##   continent gdpPercap
-    ## 1    Africa  2193.755
-    ## 2  Americas  7136.110
-    ## 3      Asia  7902.150
-    ## 4    Europe 14469.476
-    ## 5   Oceania 18621.609
+    ## 1    Africa  1192.138
+    ## 2  Americas  5465.510
+    ## 3      Asia  2646.787
+    ## 4    Europe 12081.749
+    ## 5   Oceania 17983.304
