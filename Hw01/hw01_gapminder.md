@@ -22,13 +22,7 @@ colnames(gpmd) # column names
 
     ## [1] "country"   "continent" "year"      "lifeExp"   "pop"       "gdpPercap"
 
-### Let's learn more about the contents of the data
-
-``` r
-range(gpmd$year) # range of years included 
-```
-
-    ## [1] 1952 2007
+### Let's learn more about the structure of the data
 
 ``` r
 str(gpmd) #basic summary of data structure
@@ -42,25 +36,53 @@ str(gpmd) #basic summary of data structure
     ##  $ pop      : int  8425333 9240934 10267083 11537966 13079460 14880372 12881816 13867957 16317921 22227415 ...
     ##  $ gdpPercap: num  779 821 853 836 740 ...
 
+### The range of years included in the data are:
+
 ``` r
-sum(nlevels(gpmd$country)) # number of countries
+range(gpmd$year) 
+```
+
+    ## [1] 1952 2007
+
+### How many countries are there in the dataset:
+
+``` r
+sum(nlevels(gpmd$country))
 ```
 
     ## [1] 142
 
+Let's explore life-expectancies from the dataset a bit:
+-------------------------------------------------------
+
+### What are the ranges of life expectancies?
+
 ``` r
-aggregate(gdpPercap~continent,gpmd,mean) #average gdp per Capita for each continent of all years
+range(gpmd$lifeExp)
 ```
 
-    ##   continent gdpPercap
-    ## 1    Africa  2193.755
-    ## 2  Americas  7136.110
-    ## 3      Asia  7902.150
-    ## 4    Europe 14469.476
-    ## 5   Oceania 18621.609
+    ## [1] 23.599 82.603
+
+### Which countries have the highest and lowest life-expectancies?
 
 ``` r
-aggregate(lifeExp~continent,gpmd,mean) #average life expectancy for the different continents as an aggregate of years
+gpmd$country[max(gpmd$lifeExp)] #highest
+```
+
+    ## [1] Austria
+    ## 142 Levels: Afghanistan Albania Algeria Angola Argentina ... Zimbabwe
+
+``` r
+gpmd$country[min(gpmd$lifeExp)] #lowest
+```
+
+    ## [1] Albania
+    ## 142 Levels: Afghanistan Albania Algeria Angola Argentina ... Zimbabwe
+
+### Average Life expectancy per continent:
+
+``` r
+aggregate(lifeExp~continent,gpmd,mean) #includes all years
 ```
 
     ##   continent  lifeExp
@@ -70,22 +92,16 @@ aggregate(lifeExp~continent,gpmd,mean) #average life expectancy for the differen
     ## 4    Europe 71.90369
     ## 5   Oceania 74.32621
 
-``` r
-range(gpmd$lifeExp) #What are the ranges of life-expectancies?
-```
-
-    ## [1] 23.599 82.603
+Let's learn about the mean GDP per capita for each continent
+------------------------------------------------------------
 
 ``` r
-gpmd$country[max(gpmd$lifeExp)] #Which country had the highest life expectancy?
+aggregate(gdpPercap~continent,gpmd,mean) #includes all years
 ```
 
-    ## [1] Austria
-    ## 142 Levels: Afghanistan Albania Algeria Angola Argentina ... Zimbabwe
-
-``` r
-gpmd$country[max(gpmd$lifeExp)] #Which country had the lowest life expectancy?
-```
-
-    ## [1] Austria
-    ## 142 Levels: Afghanistan Albania Algeria Angola Argentina ... Zimbabwe
+    ##   continent gdpPercap
+    ## 1    Africa  2193.755
+    ## 2  Americas  7136.110
+    ## 3      Asia  7902.150
+    ## 4    Europe 14469.476
+    ## 5   Oceania 18621.609

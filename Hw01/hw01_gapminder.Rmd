@@ -6,7 +6,6 @@ output: github_document
 ```{r load, warning=FALSE,echo=FALSE}
 library(tibble) 
 library(gapminder)
-library(DT)
 ```
 ### A basic look at the gapminder rows and columns
 ```{r}
@@ -15,15 +14,35 @@ gpmd <- gapminder
  nrow(gpmd) # number of rows 
 colnames(gpmd) # column names 
 ```
-### Let's learn more about the contents of the data
+### Let's learn more about the structure of the data
 ```{r}
-range(gpmd$year) # range of years included 
 str(gpmd) #basic summary of data structure
-sum(nlevels(gpmd$country)) # number of countries
-aggregate(gdpPercap~continent,gpmd,mean) #average gdp per Capita for each continent of all years
-aggregate(lifeExp~continent,gpmd,mean) #average life expectancy for the different continents as an aggregate of years
-range(gpmd$lifeExp) #What are the ranges of life-expectancies?
-gpmd$country[max(gpmd$lifeExp)] #Which country had the highest life expectancy?
-gpmd$country[max(gpmd$lifeExp)] #Which country had the lowest life expectancy?
+```
+### The range of years included in the data are:
+```{r}
+range(gpmd$year) 
+```
+### How many countries are there in the dataset:
+```{r}
+sum(nlevels(gpmd$country))
+```
+## Let's explore life-expectancies from the dataset a bit:
+
+### What are the ranges of life expectancies?
+```{r}
+range(gpmd$lifeExp)
+```
+### Which countries have the highest and lowest life-expectancies?
+```{r}
+gpmd$country[max(gpmd$lifeExp)] #highest
+gpmd$country[min(gpmd$lifeExp)] #lowest
 ```
 
+### Average Life expectancy per continent:
+```{r}
+aggregate(lifeExp~continent,gpmd,mean) #includes all years
+```
+## Let's learn about the mean GDP per capita for each continent
+```{r}
+aggregate(gdpPercap~continent,gpmd,mean) #includes all years
+```
