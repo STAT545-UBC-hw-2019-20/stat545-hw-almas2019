@@ -6,6 +6,11 @@ This is a repository for all my Stat 545A assignments. Stat545A is a course at U
 | --- | --- | --- |
 | [Assignment 1](https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-almas2019/tree/master/Hw01) | Rmarkdown and data exploration intro | _in progress_ |
 ### About Me 
-I am currently in my first year of my MSc in Bioinformatics as UBC where I will be working with placental genomic data. I previously did an undergrad at UBC in microbiology and immunology. I look forward to learning more about R and sharing my knowledge on this repository.  
+I am currently in my first year of my MSc in Bioinformatics at UBC where I will be working with placental genomic data. I previously did my BSc at UBC in microbiology and immunology.
+
+Outside of research I enjoy:
+*Reading
+*Badminton
+*Baking
 
 My personal github: https://github.com/almas2019
