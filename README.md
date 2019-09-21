@@ -9,8 +9,8 @@ This is a repository for all my Stat 545A assignments. Stat545A is a course at U
 I am currently in my first year of my MSc in Bioinformatics at UBC where I will be working with placental genomic data. I previously did my BSc at UBC in microbiology and immunology.
 
 Outside of research I enjoy:
-*Reading
-*Badminton
-*Baking
+* Reading
+* Badminton
+* Baking
 
 My personal github: https://github.com/almas2019
