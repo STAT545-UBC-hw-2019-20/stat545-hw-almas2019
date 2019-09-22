@@ -36,4 +36,11 @@ gapminder %>%
 
 aggregate(gapminder$gdpPercap, by=list(gapminder$country), max)
 ```
-##
+## 1.5 Scatterplot of Canada's Life Expentancy vs GDP per Capita
+```{r}
+gapminder %>%
+  filter(country == "Canada") %>%
+  ggplot(aes(log(gdpPercap),lifeExp))+
+  geom_point()
+```
+
