@@ -1,0 +1,39 @@
+---
+title: "Hw02-Explore Gapminder and use dplyr"
+author: "Almas K."
+date: '2019-09-20'
+output: github_document
+---
+
+```{r load, warning=FALSE,echo=FALSE}
+library(tidyverse) 
+library(gapminder)
+```
+## 1.1 Filter for selected 3 countries in the 1970s 
+```{r}
+gapminder %>% 
+  filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan")
+```
+## 1.2 Select country and gdpPercap from 1.1 dataset
+```{r}
+gapminder %>% 
+  filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan") %>%
+select(country, gdpPercap)
+```
+## 1.3 Filter gapminder to all entries that have experienced a drop in life expectancy.
+```{r}
+
+```
+## 1.4 Filter gapminder so that it shows the max GDP for each country:
+```{r}
+gapminder %>% 
+group_by(country) %>%
+  summarize(max(gdpPercap))
+
+gapminder %>%
+ arrange(desc(gdpPercap)) %>%
+ slice(1:3,1702:1704)
+
+aggregate(gapminder$gdpPercap, by=list(gapminder$country), max)
+```
+##
