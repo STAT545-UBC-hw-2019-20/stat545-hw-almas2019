@@ -10,38 +10,38 @@ Excercise 1:
 ------------------------------------------------
 
 ``` r
-gapminder %>% 
-  filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan")
+kable(
+  gapminder %>% 
+  filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan"))
 ```
 
-    ## # A tibble: 6 x 6
-    ##   country  continent  year lifeExp      pop gdpPercap
-    ##   <fct>    <fct>     <int>   <dbl>    <int>     <dbl>
-    ## 1 Canada   Americas   1972    72.9 22284500    18971.
-    ## 2 Canada   Americas   1977    74.2 23796400    22091.
-    ## 3 Pakistan Asia       1972    51.9 69325921     1050.
-    ## 4 Pakistan Asia       1977    54.0 78152686     1176.
-    ## 5 Sweden   Europe     1972    74.7  8122293    17832.
-    ## 6 Sweden   Europe     1977    75.4  8251648    18856.
+| country  | continent |  year|  lifeExp|       pop|  gdpPercap|
+|:---------|:----------|-----:|--------:|---------:|----------:|
+| Canada   | Americas  |  1972|   72.880|  22284500|  18970.571|
+| Canada   | Americas  |  1977|   74.210|  23796400|  22090.883|
+| Pakistan | Asia      |  1972|   51.929|  69325921|   1049.939|
+| Pakistan | Asia      |  1977|   54.043|  78152686|   1175.921|
+| Sweden   | Europe    |  1972|   74.720|   8122293|  17832.025|
+| Sweden   | Europe    |  1977|   75.440|   8251648|  18855.725|
 
 1.2 Select country and gdpPercap from 1.1 dataset
 -------------------------------------------------
 
 ``` r
+kable(
 gapminder %>% 
-  filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan") %>%
-select(country, gdpPercap)
+filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan") %>%
+select(country, gdpPercap))
 ```
 
-    ## # A tibble: 6 x 2
-    ##   country  gdpPercap
-    ##   <fct>        <dbl>
-    ## 1 Canada      18971.
-    ## 2 Canada      22091.
-    ## 3 Pakistan     1050.
-    ## 4 Pakistan     1176.
-    ## 5 Sweden      17832.
-    ## 6 Sweden      18856.
+| country  |  gdpPercap|
+|:---------|----------:|
+| Canada   |  18970.571|
+| Canada   |  22090.883|
+| Pakistan |   1049.939|
+| Pakistan |   1175.921|
+| Sweden   |  17832.025|
+| Sweden   |  18855.725|
 
 1.3 Filter gapminder to all entries that have experienced a drop in life expectancy.
 ------------------------------------------------------------------------------------
@@ -113,23 +113,23 @@ We will look at continent as our categorical and population as our quantitative 
 ### 2.1 : Summary Table
 
 ``` r
+kable(
 gapminder %>% 
   group_by(continent) %>% #This tells you the possible values for continent
  summarize(min(pop) # The minimum population by each continent
            ,max(pop) # The maximum (min and max make up range)
            ,mean(pop) #Th mean population
            ,sd(pop), #The standard deviation or the spread of the population
-           IQR(pop)) #The Interquartile range (also another measure of spread)
+           IQR(pop))) #The Interquartile range (also another measure of spread)
 ```
 
-    ## # A tibble: 5 x 6
-    ##   continent `min(pop)` `max(pop)` `mean(pop)`  `sd(pop)` `IQR(pop)`
-    ##   <fct>          <int>      <int>       <dbl>      <dbl>      <dbl>
-    ## 1 Africa         60011  135031164    9916003.  15490923.   9459415.
-    ## 2 Americas      662850  301139947   24504795.  50979430.  15377950.
-    ## 3 Asia          120447 1318683096   77038722. 206885205.  42455955 
-    ## 4 Europe        147962   82400996   17169765.  20519438.  17471367 
-    ## 5 Oceania      1994794   20434176    8874672.   6506342.  11152412.
+| continent |  min(pop)|    max(pop)|  mean(pop)|    sd(pop)|  IQR(pop)|
+|:----------|---------:|-----------:|----------:|----------:|---------:|
+| Africa    |     60011|   135031164|    9916003|   15490923|   9459415|
+| Americas  |    662850|   301139947|   24504795|   50979430|  15377950|
+| Asia      |    120447|  1318683096|   77038722|  206885205|  42455955|
+| Europe    |    147962|    82400996|   17169765|   20519438|  17471367|
+| Oceania   |   1994794|    20434176|    8874672|    6506342|  11152412|
 
 From this we can see 5 possible values for continent, as well as the range and spread. Now onto the distribution for \#2:
 
@@ -149,4 +149,7 @@ The population was log transformed. After log transformation, it is interesting 
 Excercise 3 : Produce Various Plots
 -----------------------------------
 
-I will use the
+I will be using a the \_\_\_\_ dataset from the R datasets package, since we are allowed to use this package. This data deals with
+
+Plot 1:
+-------
