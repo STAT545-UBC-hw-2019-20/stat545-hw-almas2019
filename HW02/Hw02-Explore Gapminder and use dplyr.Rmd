@@ -48,8 +48,17 @@ gapminder %>%
   ggplot(aes(log(gdpPercap),lifeExp))+
   geom_point()
 ```
-#Excercise 2: : Explore individual variables with dplyr
+##Excercise 2: : Explore individual variables with dplyr
+We will look at continent as our categorical and population as our quantitative in the gapminder dataset
 ```{r}
-
+gapminder %>% 
+  group_by(continent) %>% #This tells you the possible values for continent
+ summarize(min(pop) # The minimum population by each continent
+           ,max(pop) # The maximum (min and max make up range)
+           ,mean(pop) #Th mean population
+           ,sd(pop), #The sd or the spread of the population
+           IQR(pop)) #The Interquartile range (also part of spread)
 ```
+From this we can see 5 possible values for continent, as well as the range and spread. Now onto the density and 
+## Excercise 3 : Produce Various Plots
 
