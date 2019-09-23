@@ -34,12 +34,6 @@ mutate(increaseLifeExp=lifeExp-lag(lifeExp)) %>%
 gapminder %>% 
 group_by(country) %>%
   summarize(max(gdpPercap))
-
-gapminder %>%
- arrange(desc(gdpPercap)) %>%
- slice(1:3,1702:1704)
-
-aggregate(gapminder$gdpPercap, by=list(gapminder$country), max)
 ```
 ## 1.5 Scatterplot of Canada's Life Expentancy vs GDP per Capita
 ```{r}
@@ -49,7 +43,7 @@ gapminder %>%
   geom_point()
 ```
 ##Excercise 2: : Explore individual variables with dplyr
-We will look at continent as our categorical and population as our quantitative in the gapminder dataset. We will look at various summary stats in 2.1 and the distribution in 2.2. 
+We will look at continent as our categorical and population as our quantitative in the gapminder dataset.
 ###2.1 : Summary Table
 ```{r}
 gapminder %>% 
@@ -70,5 +64,6 @@ gapminder %>%
 
 ```
 The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data
-## Excercise 3 : Produce Various Plots
 
+## Excercise 3 : Produce Various Plots
+I will use the 
