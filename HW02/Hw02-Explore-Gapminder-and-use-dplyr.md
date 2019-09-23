@@ -3,17 +3,6 @@ Hw02-Explore Gapminder and use dplyr
 Almas K.
 2019-09-20
 
-    ## ── Attaching packages ──────────────────────────────────── tidyverse 1.2.1 ──
-
-    ## ✔ ggplot2 3.2.1     ✔ purrr   0.3.2
-    ## ✔ tibble  2.1.3     ✔ dplyr   0.8.3
-    ## ✔ tidyr   0.8.3     ✔ stringr 1.4.0
-    ## ✔ readr   1.3.1     ✔ forcats 0.4.0
-
-    ## ── Conflicts ─────────────────────────────────────── tidyverse_conflicts() ──
-    ## ✖ dplyr::filter() masks stats::filter()
-    ## ✖ dplyr::lag()    masks stats::lag()
-
 Excercise 1:
 ============
 
@@ -114,7 +103,14 @@ gapminder %>%
   geom_point()
 ```
 
-![](Hw02-Explore-Gapminder-and-use-dplyr_files/figure-markdown_github/unnamed-chunk-5-1.png) \#\#Excercise 2: : Explore individual variables with dplyr We will look at continent as our categorical and population as our quantitative in the gapminder dataset. \#\#\#2.1 : Summary Table
+![](Hw02-Explore-Gapminder-and-use-dplyr_files/figure-markdown_github/unnamed-chunk-5-1.png)
+
+Excercise 2: : Explore individual variables with dplyr
+------------------------------------------------------
+
+We will look at continent as our categorical and population as our quantitative in the gapminder dataset.
+
+### 2.1 : Summary Table
 
 ``` r
 gapminder %>% 
@@ -135,7 +131,9 @@ gapminder %>%
     ## 4 Europe        147962   82400996   17169765.  20519438.  17471367 
     ## 5 Oceania      1994794   20434176    8874672.   6506342.  11152412.
 
-From this we can see 5 possible values for continent, as well as the range and spread. Now onto the distribution for \#2: \#\#\# 2.2 Density Plot
+From this we can see 5 possible values for continent, as well as the range and spread. Now onto the distribution for \#2:
+
+### 2.2 Density Plot
 
 ``` r
 gapminder %>% 
@@ -144,7 +142,9 @@ gapminder %>%
     facet_wrap(. ~continent) #Allows you to plot the density plots separately for each continent and side by side 
 ```
 
-![](Hw02-Explore-Gapminder-and-use-dplyr_files/figure-markdown_github/unnamed-chunk-7-1.png) The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data
+![](Hw02-Explore-Gapminder-and-use-dplyr_files/figure-markdown_github/unnamed-chunk-7-1.png)
+
+The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data
 
 Excercise 3 : Produce Various Plots
 -----------------------------------

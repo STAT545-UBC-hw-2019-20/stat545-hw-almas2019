@@ -6,12 +6,12 @@ output: github_document
 ---
 
 ```{r load, warning=FALSE,echo=FALSE}
-library(tidyverse) 
-library(gapminder)
+suppressPackageStartupMessages(library(tidyverse)) 
+suppressPackageStartupMessages(library(gapminder))
 ```
 # Excercise 1:
 
-##1.1 Filter for selected 3 countries in the 1970s 
+## 1.1 Filter for selected 3 countries in the 1970s 
 ```{r}
 gapminder %>% 
   filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan")
@@ -42,9 +42,11 @@ gapminder %>%
   ggplot(aes(log(gdpPercap),lifeExp))+
   geom_point()
 ```
-##Excercise 2: : Explore individual variables with dplyr
+
+## Excercise 2: : Explore individual variables with dplyr
 We will look at continent as our categorical and population as our quantitative in the gapminder dataset.
-###2.1 : Summary Table
+
+### 2.1 : Summary Table
 ```{r}
 gapminder %>% 
   group_by(continent) %>% #This tells you the possible values for continent
@@ -55,6 +57,7 @@ gapminder %>%
            IQR(pop)) #The Interquartile range (also another measure of spread)
 ```
 From this we can see 5 possible values for continent, as well as the range and spread. Now onto the distribution for #2:
+
 ### 2.2 Density Plot 
 ```{r}
 gapminder %>% 
@@ -63,6 +66,7 @@ gapminder %>%
     facet_wrap(. ~continent) #Allows you to plot the density plots separately for each continent and side by side 
 
 ```
+
 The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data
 
 ## Excercise 3 : Produce Various Plots
