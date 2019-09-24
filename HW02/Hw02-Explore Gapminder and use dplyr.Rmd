@@ -121,4 +121,4 @@ filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
 ```
 
 The analyst did not succeed. They misssed about 12 datapoints. The reason is because they used == and a column bind, which relies on both sets of data to be the same size,thus it recycles the c(Afghanistan,Rwanda) until it is the length of the longest vector, which is the case here. Also the first Afghanistan is skipped because it is looking exactly in the order it was given (Rwanda,Afghanistan) so it will go to Rwanda in 1952 first and skip Afghanistan in that year. It does this back and forth until it runs out of recycling and consequently skipped half the rows. 
-#
+
