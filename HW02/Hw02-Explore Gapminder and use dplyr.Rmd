@@ -31,6 +31,7 @@ select(country, gdpPercap))
 ## 1.3 Filter gapminder to all entries that have experienced a drop in life expectancy.
 ```{r}
   gapminder %>%
+  arrange(year) %>%
   group_by(country) %>%
 mutate(increaseLifeExp=lifeExp-lag(lifeExp)) %>%
   filter(increaseLifeExp<0)
