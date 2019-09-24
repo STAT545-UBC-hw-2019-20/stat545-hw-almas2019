@@ -92,7 +92,9 @@ mtcars %>%
 
 
 ```
+
 There is an overall negative association between miles per gallon and horsepower for automatic transmission cars here. 
+
 ##Plot 2: Bar Graph Showing for each cylinder and transmission type 
 ```{r}
 mtcars %>%
@@ -103,13 +105,19 @@ mtcars %>%
   labs(x="Number of cylinders") #changed x labels 
 
 ```
+
 Most cars in the dataset were 8 cylinder , and most of the 8 cylinder were automatic transmission.
+
 ## Recycling:
 ```{r}
 filter(gapminder, country == c("Rwanda", "Afghanistan")) 
 
+## Use these 2 options below instead:
 gapminder %>% 
   filter(country =="Rwanda" | country =="Afghanistan")
+## Or
+filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
 ```
+
 No the analyst misssed about 12 datapoints. The reason is because they used == and a column bind, which relies on both sets of data to be the same size,thus it recycles the c(Afghanistan,Rwanda) until it is the length of the longest vector, which is the case here. Also the first Afghanistan is skipped because it is looking exactly in the order it was given (Rwanda,Afghanistan) so it will go to Rwanda in 1952 first and skip Afghanistan in that year. It does this back and forth until it runs out of recycling and consequently skipped half the rows. 
 #
