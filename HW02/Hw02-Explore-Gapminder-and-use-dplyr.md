@@ -209,7 +209,7 @@ filter(gapminder, country == c("Rwanda", "Afghanistan"))
 ``` r
 ## Use these 2 options below instead:
 gapminder %>% 
-  filter(country =="Rwanda" | country =="Afghanistan")
+  filter(country =="Rwanda" | country =="Afghanistan") #Option 1
 ```
 
     ## # A tibble: 24 x 6
@@ -228,7 +228,7 @@ gapminder %>%
     ## # … with 14 more rows
 
 ``` r
-filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
+filter(gapminder, country %in% c("Rwanda", "Afghanistan")) #Option 2
 ```
 
     ## # A tibble: 24 x 6
