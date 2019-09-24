@@ -149,7 +149,100 @@ The population was log transformed. After log transformation, it is interesting 
 Excercise 3 : Produce Various Plots
 -----------------------------------
 
-I will be using a the \_\_\_\_ dataset from the R datasets package, since we are allowed to use this package. This data deals with
+I will be using mtcars dataset from the R datasets package for Plot 1. This data deals with different aspects of vehicle design for 32 cars.
 
-Plot 1:
--------
+Plot 1: Scatter Plot of Horsepower vs Miles per Gallon for Automatic Transmissions
+----------------------------------------------------------------------------------
+
+``` r
+mtcars %>% 
+  filter(am==0) %>% ##Filter for automatics transmissions
+  ggplot(aes(x=mpg,y=hp)) + 
+  geom_point()+
+  labs(x="Miles per Gallon",y="Horsepower")
+```
+
+![](Hw02-Explore-Gapminder-and-use-dplyr_files/figure-markdown_github/unnamed-chunk-8-1.png)
+
+There is an overall negative association between miles per gallon and horsepower for automatic transmission cars here.
+
+Plot 2: Bar Graph Showing for each cylinder and transmission type
+-----------------------------------------------------------------
+
+``` r
+mtcars %>%
+  mutate(cyl=as.factor(cyl)) %>% #Change cylinder to Factor
+  mutate(automatic_transmiss=if_else(am==0,"Yes","No")) %>% # created new factor for transmission
+  ggplot(aes(x=cyl,group=automatic_transmiss))+ #Chose aesthetics
+  geom_bar(aes(fill=automatic_transmiss))+ #Added colour fill for bar chart 
+  labs(x="Number of cylinders") #changed x labels 
+```
+
+![](Hw02-Explore-Gapminder-and-use-dplyr_files/figure-markdown_github/unnamed-chunk-9-1.png)
+
+Most cars in the dataset were 8 cylinder , and most of the 8 cylinder were automatic transmission.
+
+Recycling:
+----------
+
+``` r
+filter(gapminder, country == c("Rwanda", "Afghanistan")) 
+```
+
+    ## # A tibble: 12 x 6
+    ##    country     continent  year lifeExp      pop gdpPercap
+    ##    <fct>       <fct>     <int>   <dbl>    <int>     <dbl>
+    ##  1 Afghanistan Asia       1957    30.3  9240934      821.
+    ##  2 Afghanistan Asia       1967    34.0 11537966      836.
+    ##  3 Afghanistan Asia       1977    38.4 14880372      786.
+    ##  4 Afghanistan Asia       1987    40.8 13867957      852.
+    ##  5 Afghanistan Asia       1997    41.8 22227415      635.
+    ##  6 Afghanistan Asia       2007    43.8 31889923      975.
+    ##  7 Rwanda      Africa     1952    40    2534927      493.
+    ##  8 Rwanda      Africa     1962    43    3051242      597.
+    ##  9 Rwanda      Africa     1972    44.6  3992121      591.
+    ## 10 Rwanda      Africa     1982    46.2  5507565      882.
+    ## 11 Rwanda      Africa     1992    23.6  7290203      737.
+    ## 12 Rwanda      Africa     2002    43.4  7852401      786.
+
+``` r
+## Use these 2 options below instead:
+gapminder %>% 
+  filter(country =="Rwanda" | country =="Afghanistan")
+```
+
+    ## # A tibble: 24 x 6
+    ##    country     continent  year lifeExp      pop gdpPercap
+    ##    <fct>       <fct>     <int>   <dbl>    <int>     <dbl>
+    ##  1 Afghanistan Asia       1952    28.8  8425333      779.
+    ##  2 Afghanistan Asia       1957    30.3  9240934      821.
+    ##  3 Afghanistan Asia       1962    32.0 10267083      853.
+    ##  4 Afghanistan Asia       1967    34.0 11537966      836.
+    ##  5 Afghanistan Asia       1972    36.1 13079460      740.
+    ##  6 Afghanistan Asia       1977    38.4 14880372      786.
+    ##  7 Afghanistan Asia       1982    39.9 12881816      978.
+    ##  8 Afghanistan Asia       1987    40.8 13867957      852.
+    ##  9 Afghanistan Asia       1992    41.7 16317921      649.
+    ## 10 Afghanistan Asia       1997    41.8 22227415      635.
+    ## # … with 14 more rows
+
+``` r
+filter(gapminder, country %in% c("Rwanda", "Afghanistan"))
+```
+
+    ## # A tibble: 24 x 6
+    ##    country     continent  year lifeExp      pop gdpPercap
+    ##    <fct>       <fct>     <int>   <dbl>    <int>     <dbl>
+    ##  1 Afghanistan Asia       1952    28.8  8425333      779.
+    ##  2 Afghanistan Asia       1957    30.3  9240934      821.
+    ##  3 Afghanistan Asia       1962    32.0 10267083      853.
+    ##  4 Afghanistan Asia       1967    34.0 11537966      836.
+    ##  5 Afghanistan Asia       1972    36.1 13079460      740.
+    ##  6 Afghanistan Asia       1977    38.4 14880372      786.
+    ##  7 Afghanistan Asia       1982    39.9 12881816      978.
+    ##  8 Afghanistan Asia       1987    40.8 13867957      852.
+    ##  9 Afghanistan Asia       1992    41.7 16317921      649.
+    ## 10 Afghanistan Asia       1997    41.8 22227415      635.
+    ## # … with 14 more rows
+
+The analyst did not succeed. They misssed about 12 datapoints. The reason is because they used == and a column bind, which relies on both sets of data to be the same size,thus it recycles the c(Afghanistan,Rwanda) until it is the length of the longest vector, which is the case here. Also the first Afghanistan is skipped because it is looking exactly in the order it was given (Rwanda,Afghanistan) so it will go to Rwanda in 1952 first and skip Afghanistan in that year. It does this back and forth until it runs out of recycling and consequently skipped half the rows. \#
