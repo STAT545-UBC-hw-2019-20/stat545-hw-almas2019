@@ -92,17 +92,18 @@ mtcars %>%
 
 
 ```
-##Plot 2: Bar Graph Showing Number of Cylinders and Numbers of Cars for each transmission type
+There is an overall negative association between miles per gallon and horsepower for automatic transmission cars here. 
+##Plot 2: Bar Graph Showing for each cylinder and transmission type 
 ```{r}
 mtcars %>%
-  mutate(cyl=as.factor(cyl)) %>%
-  mutate(automatic_transmiss=if_else(am<=0,"Yes","No")) %>%
-  ggplot(aes(x=cyl,group=automatic_transmiss))+
-  geom_bar(aes(fill=automatic_transmiss))+
-  labs(x="Number of cylinders")
+  mutate(cyl=as.factor(cyl)) %>% #Change cylinder to Factor
+  mutate(automatic_transmiss=if_else(am==0,"Yes","No")) %>% # created new factor for transmission
+  ggplot(aes(x=cyl,group=automatic_transmiss))+ #Chose aesthetics
+  geom_bar(aes(fill=automatic_transmiss))+ #Added colour fill for bar chart 
+  labs(x="Number of cylinders") #changed x labels 
 
 ```
-
+Most cars in the dataset were 8 cylinder , and most of the 8 cylinder were automatic transmission.
 ## Recycling:
 ```{r}
 filter(gapminder, country == c("Rwanda", "Afghanistan")) 
