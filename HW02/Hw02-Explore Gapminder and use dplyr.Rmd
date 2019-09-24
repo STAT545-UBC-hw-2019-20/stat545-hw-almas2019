@@ -9,6 +9,7 @@ output: github_document
 suppressPackageStartupMessages(library(tidyverse)) 
 suppressPackageStartupMessages(library(gapminder))
 suppressPackageStartupMessages(library(knitr))
+suppressPackageStartupMessages(library(datasets))
 ```
 # Excercise 1:
 
@@ -79,6 +80,34 @@ gapminder %>%
 The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data
 
 ## Excercise 3 : Produce Various Plots
-I will be using a the ____ dataset from the R datasets package, since we are allowed to use this package. This data deals with
+I will be using ChickWeight dataset from the R datasets package, since we are allowed to use this package. This data deals with experimental effects of 3 different diets on early chick growth.
 
-## Plot 1: 
+## Plot 1: Scatter Plot of GDP Per Capita in Africa over Time
+```{r}
+gapminder %>%
+group_by(year) %>%
+  summarize(meanGDP=mean(gdpPercap)) %>%
+  ggplot(aes(x=year,meanGDP)) +
+  geom_point()
+ChickWeight %>%
+  filter(Diet==1) %>%
+  group_by(Time) %>%
+  summarize(meanWeight=mean(weight)) %>%
+  ggplot(aes(x=Time,meanWeight)) +
+  geom_point()
+```
+##Plot 2:
+```{r}
+ChickWeight %>%
+  group_by(Diet) %>%
+```
+
+## Recycling:
+```{r}
+filter(gapminder, country == c("Rwanda", "Afghanistan")) 
+
+gapminder %>% 
+  filter(country =="Rwanda" | country =="Afghanistan")
+```
+No the analyst misssed about 12 datapoints. The reason is because
+#
