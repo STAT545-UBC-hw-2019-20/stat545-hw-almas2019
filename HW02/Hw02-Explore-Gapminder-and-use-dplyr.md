@@ -148,7 +148,7 @@ gapminder %>%
 The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data
 
 Excercise 3 : Produce Various Plots
------------------------------------
+===================================
 
 I will be using mtcars dataset from the R datasets package for Plot 1. This data deals with different aspects of vehicle design for 32 cars.
 
