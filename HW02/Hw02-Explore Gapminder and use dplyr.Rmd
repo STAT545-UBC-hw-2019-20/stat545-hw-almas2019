@@ -80,26 +80,27 @@ gapminder %>%
 The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data
 
 ## Excercise 3 : Produce Various Plots
-I will be using ChickWeight dataset from the R datasets package, since we are allowed to use this package. This data deals with experimental effects of 3 different diets on early chick growth.
+I will be using mtcars dataset from the R datasets package for Plot 1. This data deals with different aspects of vehicle design for 32 cars.
 
-## Plot 1: Scatter Plot of GDP Per Capita in Africa over Time
+## Plot 1: Scatter Plot of Horsepower vs Miles per Gallon for Automatic Transmissions
 ```{r}
-gapminder %>%
-group_by(year) %>%
-  summarize(meanGDP=mean(gdpPercap)) %>%
-  ggplot(aes(x=year,meanGDP)) +
-  geom_point()
-ChickWeight %>%
-  filter(Diet==1) %>%
-  group_by(Time) %>%
-  summarize(meanWeight=mean(weight)) %>%
-  ggplot(aes(x=Time,meanWeight)) +
-  geom_point()
+mtcars %>% 
+  filter(am==0) %>% ##Filter for automatics transmissions
+  ggplot(aes(x=mpg,y=hp)) + 
+  geom_point()+
+  labs(x="Miles per Gallon",y="Horsepower")
+
+
 ```
-##Plot 2:
+##Plot 2: Bar Graph Showing Number of Cylinders and Numbers of Cars for each transmission type
 ```{r}
-ChickWeight %>%
-  group_by(Diet) %>%
+mtcars %>%
+  mutate(cyl=as.factor(cyl)) %>%
+  mutate(automatic_transmiss=if_else(am<=0,"Yes","No")) %>%
+  ggplot(aes(x=cyl,group=automatic_transmiss))+
+  geom_bar(aes(fill=automatic_transmiss))+
+  labs(x="Number of cylinders")
+
 ```
 
 ## Recycling:
@@ -109,5 +110,5 @@ filter(gapminder, country == c("Rwanda", "Afghanistan"))
 gapminder %>% 
   filter(country =="Rwanda" | country =="Afghanistan")
 ```
-No the analyst misssed about 12 datapoints. The reason is because
+No the analyst misssed about 12 datapoints. The reason is because they used == and a column bind, which relies on both sets of data to be the same size,thus it recycles the c(Afghanistan,Rwanda) until it is the length of the longest vector, which in this case is  
 #
