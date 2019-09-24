@@ -10,9 +10,9 @@ Excercise 1:
 ------------------------------------------------
 
 ``` r
-kable(
   gapminder %>% 
-  filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan"))
+  filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan")%>%
+  knitr::kable()
 ```
 
 | country  | continent |  year|  lifeExp|       pop|  gdpPercap|
@@ -28,10 +28,10 @@ kable(
 -------------------------------------------------
 
 ``` r
-kable(
 gapminder %>% 
 filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan") %>%
-select(country, gdpPercap))
+select(country, gdpPercap) %>%
+  knitr::kable()
 ```
 
 | country  |  gdpPercap|
@@ -48,25 +48,26 @@ select(country, gdpPercap))
 
 ``` r
   gapminder %>%
+  arrange(year) %>%
   group_by(country) %>%
-mutate(increaseLifeExp=lifeExp-lag(lifeExp)) %>%
-  filter(increaseLifeExp<0)
+mutate(incrsLifeExp=lifeExp-lag(lifeExp)) %>%
+  filter(incrsLifeExp<0)
 ```
 
     ## # A tibble: 102 x 7
     ## # Groups:   country [52]
-    ##    country  continent  year lifeExp     pop gdpPercap increaseLifeExp
-    ##    <fct>    <fct>     <int>   <dbl>   <int>     <dbl>           <dbl>
-    ##  1 Albania  Europe     1992    71.6 3326498     2497.          -0.419
-    ##  2 Angola   Africa     1987    39.9 7874230     2430.          -0.036
-    ##  3 Benin    Africa     2002    54.4 7026113     1373.          -0.371
-    ##  4 Botswana Africa     1992    62.7 1342614     7954.          -0.877
-    ##  5 Botswana Africa     1997    52.6 1536536     8647.         -10.2  
-    ##  6 Botswana Africa     2002    46.6 1630347    11004.          -5.92 
-    ##  7 Bulgaria Europe     1977    70.8 8797022     7612.          -0.09 
-    ##  8 Bulgaria Europe     1992    71.2 8658506     6303.          -0.15 
-    ##  9 Bulgaria Europe     1997    70.3 8066057     5970.          -0.87 
-    ## 10 Burundi  Africa     1992    44.7 5809236      632.          -3.48 
+    ##    country         continent  year lifeExp       pop gdpPercap incrsLifeExp
+    ##    <fct>           <fct>     <int>   <dbl>     <int>     <dbl>        <dbl>
+    ##  1 China           Asia       1962    44.5 665770000      488.      -6.05  
+    ##  2 Cambodia        Asia       1972    40.3   7450606      422.      -5.10  
+    ##  3 Czech Republic  Europe     1972    70.3   9862158    13108.      -0.0900
+    ##  4 Netherlands     Europe     1972    73.8  13329874    18795.      -0.0700
+    ##  5 Slovak Republic Europe     1972    70.4   4593433     9674.      -0.63  
+    ##  6 Bulgaria        Europe     1977    70.8   8797022     7612.      -0.09  
+    ##  7 Cambodia        Asia       1977    31.2   6978607      525.      -9.10  
+    ##  8 El Salvador     Americas   1977    56.7   4282586     5139.      -1.51  
+    ##  9 Poland          Europe     1977    70.7  34621254     9508.      -0.180 
+    ## 10 Uganda          Africa     1977    50.4  11457758      844.      -0.666 
     ## # … with 92 more rows
 
 1.4 Filter gapminder so that it shows the max GDP for each country:
@@ -113,14 +114,14 @@ We will look at continent as our categorical and population as our quantitative 
 ### 2.1 : Summary Table
 
 ``` r
-kable(
 gapminder %>% 
   group_by(continent) %>% #This tells you the possible values for continent
  summarize(min(pop) # The minimum population by each continent
            ,max(pop) # The maximum (min and max make up range)
            ,mean(pop) #Th mean population
            ,sd(pop), #The standard deviation or the spread of the population
-           IQR(pop))) #The Interquartile range (also another measure of spread)
+           IQR(pop)) %>% #The Interquartile range (also another measure of spread)
+  knitr::kable()
 ```
 
 | continent |  min(pop)|    max(pop)|  mean(pop)|    sd(pop)|  IQR(pop)|

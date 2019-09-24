@@ -8,24 +8,23 @@ output: github_document
 ```{r load, warning=FALSE,echo=FALSE}
 suppressPackageStartupMessages(library(tidyverse)) 
 suppressPackageStartupMessages(library(gapminder))
-suppressPackageStartupMessages(library(knitr))
 suppressPackageStartupMessages(library(datasets))
 ```
 # Excercise 1:
 
 ## 1.1 Filter for selected 3 countries in the 1970s 
 ```{r}
-kable(
   gapminder %>% 
-  filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan"))
+  filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan")%>%
+  knitr::kable()
 ```
 
 ## 1.2 Select country and gdpPercap from 1.1 dataset
 ```{r}
-kable(
 gapminder %>% 
 filter(year >= 1970 & year <= 1979, country == "Canada"|country == "Sweden"|country == "Pakistan") %>%
-select(country, gdpPercap))
+select(country, gdpPercap) %>%
+  knitr::kable()
 ```
 
 ## 1.3 Filter gapminder to all entries that have experienced a drop in life expectancy.
@@ -33,8 +32,8 @@ select(country, gdpPercap))
   gapminder %>%
   arrange(year) %>%
   group_by(country) %>%
-mutate(increaseLifeExp=lifeExp-lag(lifeExp)) %>%
-  filter(increaseLifeExp<0)
+mutate(incrsLifeExp=lifeExp-lag(lifeExp)) %>%
+  filter(incrsLifeExp<0)
 ```
 
 ## 1.4 Filter gapminder so that it shows the max GDP for each country:
@@ -57,14 +56,15 @@ We will look at continent as our categorical and population as our quantitative 
 
 ### 2.1 : Summary Table
 ```{r}
-kable(
+
 gapminder %>% 
   group_by(continent) %>% #This tells you the possible values for continent
  summarize(min(pop) # The minimum population by each continent
            ,max(pop) # The maximum (min and max make up range)
            ,mean(pop) #Th mean population
            ,sd(pop), #The standard deviation or the spread of the population
-           IQR(pop))) #The Interquartile range (also another measure of spread)
+           IQR(pop)) %>% #The Interquartile range (also another measure of spread)
+  knitr::kable()
 ```
 
 From this we can see 5 possible values for continent, as well as the range and spread. Now onto the distribution for #2:
