@@ -30,8 +30,8 @@ select(country, gdpPercap) %>%
 ## 1.3 Filter gapminder to all entries that have experienced a drop in life expectancy.
 ```{r}
   gapminder %>%
+   group_by(country)  %>%
   arrange(year) %>%
-  group_by(country) %>%
 mutate(incrsLifeExp=lifeExp-lag(lifeExp)) %>%
   filter(incrsLifeExp<0)
 ```
@@ -40,7 +40,7 @@ mutate(incrsLifeExp=lifeExp-lag(lifeExp)) %>%
 ```{r}
 gapminder %>% 
 group_by(country) %>%
-  summarize(max(gdpPercap))
+  summarize(max(gdpPercap)) 
 ```
 
 ## 1.5 Scatterplot of Canada's Life Expentancy vs GDP per Capita
@@ -78,7 +78,7 @@ gapminder %>%
 
 ```
 
-The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data
+The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data.
 
 # Excercise 3 : Produce Various Plots
 I will be using mtcars dataset from the R datasets package for Plot 1. This data deals with different aspects of vehicle design for 32 cars.
@@ -94,7 +94,7 @@ mtcars %>%
 
 There is an overall negative association between miles per gallon and horsepower for automatic transmission cars here. 
 
-##Plot 2: Bar Graph Showing for each cylinder and transmission type 
+##Plot 2: Bar Graph Showing Number of Cars in mtcars for Each Cylinder and Transmission type 
 ```{r}
 mtcars %>%
   mutate(cyl=as.factor(cyl)) %>% #Change cylinder to Factor
@@ -111,7 +111,7 @@ Most cars in the dataset were 8 cylinder , and most of the 8 cylinder were autom
 ```{r}
 filter(gapminder, country == c("Rwanda", "Afghanistan")) 
 
-## Use these 2 options below instead:
+## Use one of these 2 options below instead:
 gapminder %>% 
   filter(country =="Rwanda" | country =="Afghanistan") #Option 1
 

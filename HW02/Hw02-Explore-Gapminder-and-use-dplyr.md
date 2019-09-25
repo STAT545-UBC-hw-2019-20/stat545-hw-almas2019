@@ -48,8 +48,8 @@ select(country, gdpPercap) %>%
 
 ``` r
   gapminder %>%
+   group_by(country)  %>%
   arrange(year) %>%
-  group_by(country) %>%
 mutate(incrsLifeExp=lifeExp-lag(lifeExp)) %>%
   filter(incrsLifeExp<0)
 ```
@@ -76,7 +76,7 @@ mutate(incrsLifeExp=lifeExp-lag(lifeExp)) %>%
 ``` r
 gapminder %>% 
 group_by(country) %>%
-  summarize(max(gdpPercap))
+  summarize(max(gdpPercap)) 
 ```
 
     ## # A tibble: 142 x 2
@@ -145,7 +145,7 @@ gapminder %>%
 
 ![](Hw02-Explore-Gapminder-and-use-dplyr_files/figure-markdown_github/unnamed-chunk-7-1.png)
 
-The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data
+The population was log transformed. After log transformation, it is interesting to note the bimodal distribution for Oceania and Europe's population data.
 
 Excercise 3 : Produce Various Plots
 ===================================
@@ -167,8 +167,8 @@ mtcars %>%
 
 There is an overall negative association between miles per gallon and horsepower for automatic transmission cars here.
 
-Plot 2: Bar Graph Showing for each cylinder and transmission type
------------------------------------------------------------------
+Plot 2: Bar Graph Showing Number of Cars in mtcars for Each Cylinder and Transmission type
+------------------------------------------------------------------------------------------
 
 ``` r
 mtcars %>%
@@ -207,7 +207,7 @@ filter(gapminder, country == c("Rwanda", "Afghanistan"))
     ## 12 Rwanda      Africa     2002    43.4  7852401      786.
 
 ``` r
-## Use these 2 options below instead:
+## Use one of these 2 options below instead:
 gapminder %>% 
   filter(country =="Rwanda" | country =="Afghanistan") #Option 1
 ```
