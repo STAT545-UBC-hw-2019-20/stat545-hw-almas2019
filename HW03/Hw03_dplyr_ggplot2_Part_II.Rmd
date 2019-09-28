@@ -1,0 +1,32 @@
+---
+title: "Hw03_dplyr_ggplot2_Part_II"
+author: "Almas K."
+date: '2019-09-28'
+output: github_document
+---
+```{r load, warning=FALSE,echo=FALSE}
+suppressPackageStartupMessages(library(tidyverse)) 
+suppressPackageStartupMessages(library(gapminder))
+```
+## Task Option 2: Maximum and minimum of GDP per capita for all continents
+
+```{r}
+gapminder %>%
+   group_by(continent)  %>%
+  summarize(max=max(gdpPercap),min=min(gdpPercap)) 
+  
+```
+
+
+## Task Option 5: How is life expectancy changing over time on different continents?
+```{r}
+gapminder %>%
+   group_by(continent,year)  %>%
+  arrange(year) %>%
+  summarize(meanLife= mean(lifeExp)) %>%
+print() %>%
+  ggplot(aes( x=year,y=meanLife)) + 
+  geom_point()+
+  facet_wrap(. ~continent) 
+```
+The life expectancy of Europe and Oceania started off fairly high in the 1950s and increased to 
