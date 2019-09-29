@@ -13,7 +13,9 @@ suppressPackageStartupMessages(library(gapminder))
 ```{r}
 gapminder %>%
    group_by(continent)  %>%
-  summarize(max=max(gdpPercap),min=min(gdpPercap)) 
+  summarize(max=max(gdpPercap),min=min(gdpPercap)) %>%
+  print() %>%
+  ggplot()
   
 ```
 
@@ -30,3 +32,19 @@ print() %>%
   facet_wrap(. ~continent) 
 ```
 The life expectancy of Europe and Oceania started off fairly high in the 1950s and increased to 
+
+
+## Task Option 3 : Look at the spread of GDP per capita within the continents.
+```{r}
+gapminder %>%
+   group_by(continent)  %>%
+mutate(log_gdpPercap= log(gdpPercap)) %>%
+  select(continent,log_gdpPercap) %>%
+  arrange(log_gdpPercap) %>%
+ print() %>%
+  ggplot(aes(x=log_gdpPercap)) +
+  geom_density() +
+   facet_wrap(. ~continent) 
+```
+
+

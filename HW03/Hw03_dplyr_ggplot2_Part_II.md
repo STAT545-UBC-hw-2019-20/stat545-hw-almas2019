@@ -9,7 +9,9 @@ Task Option 2: Maximum and minimum of GDP per capita for all continents
 ``` r
 gapminder %>%
    group_by(continent)  %>%
-  summarize(max=max(gdpPercap),min=min(gdpPercap)) 
+  summarize(max=max(gdpPercap),min=min(gdpPercap)) %>%
+  print() %>%
+  ggplot()
 ```
 
     ## # A tibble: 5 x 3
@@ -20,6 +22,8 @@ gapminder %>%
     ## 3 Asia      113523.   331 
     ## 4 Europe     49357.   974.
     ## 5 Oceania    34435. 10040.
+
+![](Hw03_dplyr_ggplot2_Part_II_files/figure-markdown_github/unnamed-chunk-1-1.png)
 
 Task Option 5: How is life expectancy changing over time on different continents?
 ---------------------------------------------------------------------------------
@@ -52,3 +56,36 @@ print() %>%
     ## # … with 50 more rows
 
 ![](Hw03_dplyr_ggplot2_Part_II_files/figure-markdown_github/unnamed-chunk-2-1.png) The life expectancy of Europe and Oceania started off fairly high in the 1950s and increased to
+
+Task Option 3 : Look at the spread of GDP per capita within the continents.
+---------------------------------------------------------------------------
+
+``` r
+gapminder %>%
+   group_by(continent)  %>%
+mutate(log_gdpPercap= log(gdpPercap)) %>%
+  select(continent,log_gdpPercap) %>%
+  arrange(log_gdpPercap) %>%
+ print() %>%
+  ggplot(aes(x=log_gdpPercap)) +
+  geom_density() +
+   facet_wrap(. ~continent) 
+```
+
+    ## # A tibble: 1,704 x 2
+    ## # Groups:   continent [5]
+    ##    continent log_gdpPercap
+    ##    <fct>             <dbl>
+    ##  1 Africa             5.49
+    ##  2 Africa             5.63
+    ##  3 Africa             5.70
+    ##  4 Africa             5.70
+    ##  5 Africa             5.74
+    ##  6 Africa             5.80
+    ##  7 Asia               5.80
+    ##  8 Africa             5.82
+    ##  9 Africa             5.83
+    ## 10 Africa             5.84
+    ## # … with 1,694 more rows
+
+![](Hw03_dplyr_ggplot2_Part_II_files/figure-markdown_github/unnamed-chunk-3-1.png)
