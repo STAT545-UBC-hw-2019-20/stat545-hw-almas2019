@@ -96,6 +96,7 @@ gapminder %>%
 ```
 
 ![](Hw03_dplyr_ggplot2_Part_II_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
 Using this measure Africa still has the most countries in all the years that are less the relative median. In fact, the gap is pronounced as life-expectancies get larger. Comparing Africa for the relative in 2007, you see 47 countries that are below this threshold while for the absolute in 1.1 only 41 countries are below this threshold. Also interesting to note the trend in Europe having no countries below the relative threshold from the 60s to about the 70s, and then having some countries below this threshold onward. 
 
 ## Task Option 3 : Look at the spread of GDP per capita within the continents.
