@@ -61,7 +61,7 @@ Using this measure Africa still has the most countries in all the years that are
 ## Task Option 3 : Look at the spread of GDP per capita within the continents.
 
 ### 3.1 Table for spread:
-Let's look at the the spread of GDP per capita first using the minimum, maximum and interquartile range
+Let's look at the the spread of GDP per capita first using the minimum, maximum, standard deviation and interquartile range. 
 ```{r}
 gdp_spread <- gapminder %>%
    group_by(continent)  %>%

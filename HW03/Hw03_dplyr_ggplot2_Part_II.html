@@ -258,7 +258,7 @@ summary {
 <h2>Task Option 3 : Look at the spread of GDP per capita within the continents.</h2>
 <div id="table-for-spread" class="section level3">
 <h3>3.1 Table for spread:</h3>
-<p>Let’s look at the the spread of GDP per capita first using the minimum, maximum and interquartile range</p>
+<p>Let’s look at the the spread of GDP per capita first using the minimum, maximum, standard deviation and interquartile range.</p>
 <pre class="r"><code>gdp_spread &lt;- gapminder %&gt;%
    group_by(continent)  %&gt;%
 mutate(log_gdpPercap= log(gdpPercap)) %&gt;%
