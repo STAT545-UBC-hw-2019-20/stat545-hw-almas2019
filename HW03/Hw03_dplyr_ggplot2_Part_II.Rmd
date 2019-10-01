@@ -8,43 +8,64 @@ output: github_document
 suppressPackageStartupMessages(library(tidyverse)) 
 suppressPackageStartupMessages(library(gapminder))
 ```
-## Task Option 2: Maximum and minimum of GDP per capita for all continents
 
+## Task Option 1:Report the absolute and/or relative abundance of countries with low life expectancy over time by continent: Compute some measure of worldwide life expectancy – you decide – a mean or median or some other quantile or perhaps your current age. Then determine how many countries on each continent have a life expectancy less than this benchmark, for each year.
 ```{r}
 gapminder %>%
-   group_by(continent)  %>%
-  summarize(max=max(gdpPercap),min=min(gdpPercap)) %>%
+  group_by(year) %>%
+  mutate(median_lifeExp=median(lifeExp)) %>%
+  ungroup(year) %>%
+  mutate(less_than_median= if_else(lifeExp<median_lifeExp,TRUE,FALSE)) %>%
+  filter (less_than_median==TRUE) %>%
+  group_by(continent,year,less_than_median) %>%
+  summarize(n_less_than_median=sum(less_than_median)) %>%
   print() %>%
-  ggplot()
+  ggplot(aes(x=year, y=n_less_than_median,group=continent))+
+  geom_bar(aes(fill=continent),position="dodge",stat="identity")
+
+gapminder %>%
+  group_by(year) %>%
+  mutate(median_lifeExp=median(lifeExp)) %>%
+  ungroup(year) %>%
+  mutate(less_than_median= if_else(lifeExp<median_lifeExp,TRUE,FALSE)) %>%
+  group_by(continent,year,less_than_median) %>%
+  count()
   
 ```
 
 
-## Task Option 5: How is life expectancy changing over time on different continents?
-```{r}
-gapminder %>%
-   group_by(continent,year)  %>%
-  arrange(year) %>%
-  summarize(meanLife= mean(lifeExp)) %>%
-print() %>%
-  ggplot(aes( x=year,y=meanLife)) + 
-  geom_point()+
-  facet_wrap(. ~continent) 
-```
-The life expectancy of Europe and Oceania started off fairly high in the 1950s and increased to 
-
 
 ## Task Option 3 : Look at the spread of GDP per capita within the continents.
 ```{r}
-gapminder %>%
+gp_spread <- gapminder %>%
    group_by(continent)  %>%
 mutate(log_gdpPercap= log(gdpPercap)) %>%
-  select(continent,log_gdpPercap) %>%
-  arrange(log_gdpPercap) %>%
- print() %>%
+  arrange(log_gdpPercap)
+gp_spread %>%
+  summarize(min(gdpPercap),
+            max(gdpPercap),
+            sd(gdpPercap),
+            IQR(gdpPercap))
+gp_spread %>%
   ggplot(aes(x=log_gdpPercap)) +
   geom_density() +
    facet_wrap(. ~continent) 
+
+
 ```
+
+THe distribution is right skewed for Africa, left-skewed for Europe, mostly normal for the Americas and Oceania, and It is interesting to note that the Americas are the
+
+## Task Option 4: Compute a trimmed mean of life expectancy for different years. Or a weighted mean, weighting by population. Just try something other than the plain vanilla mean.
+```{r}
+gapminder %>%
+   group_by(continent,year)  %>%
+  summarize(wt_mean=weighted.mean(lifeExp,pop,na.rm = TRUE)) %>%
+  print() %>%
+  ggplot(aes(x=year,y=wt_mean)) +
+  geom_point()+
+  facet_wrap(. ~continent) 
+```
+
 
 
