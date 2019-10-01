@@ -130,9 +130,17 @@ gdp_spread %>%
 
 This produces a tibble of 5 rows that show the spread of the GDP per capita. It already looks like the spread between Asia appears large, while Africa has the lowest minimums and maximums of the 5 continents. 
 
-Next, Let's look at a density plot for a visual representation: 
+Next, Let's look at a box plot and density plot for spread:
 
-### 3.2 : Density Plot for gdpPerCapita
+### 3.2 : Density Plot and Box plot for gdpPerCapita
+
+```r
+gdp_spread %>%
+  ggplot(aes(y=log_gdpPercap,x=continent)) +
+  geom_boxplot() 
+```
+
+![](Hw03_dplyr_ggplot2_Part_II_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
 ```r
 gdp_spread %>%
@@ -141,10 +149,10 @@ gdp_spread %>%
    facet_wrap(. ~continent) 
 ```
 
-![](Hw03_dplyr_ggplot2_Part_II_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](Hw03_dplyr_ggplot2_Part_II_files/figure-html/unnamed-chunk-4-2.png)<!-- -->
 
 
-The distribution is right skewed for Africa, left-skewed for Europe, mostly normal for the Americas and Oceania, and it is interesting to note that the Americas and Oceania are mostly normally distributed. As predicted the spread between Asia is large and not normal. 
+The distribution is right skewed for Africa, left-skewed for Europe, mostly normal for the Americas and Oceania, and it is interesting to note that the Americas and Oceania are mostly normally distributed. As predicted the spread between Asia is large and not normal. The boxplots show that Asia has larger variability and that the Americas look mostly symmetric.The median for Oceania is the highest and median gdp for Africa appears to be lower than the other samples.  
 
 ## Task Option 4: Compute a weighted mean of life expectancy for different years, weighting by population. 
 
