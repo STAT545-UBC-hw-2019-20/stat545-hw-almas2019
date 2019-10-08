@@ -22,7 +22,7 @@ gapwide <- gapminder %>%
   filter((country=="Algeria")|(country=="Bahrain")|(country=="Canada")) %>%
   pivot_wider(id_cols= year, 
               names_from= country,
-              values_from = lifeExp)
+              values_from = lifeExp) %>%
 print(gapwide)
 ```
 
@@ -55,7 +55,9 @@ gapwide %>%
 ```
 
 ![](HW04_tidy_data_and_joins_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
 Over time, life Expectancy of Bahrain is higher compared to Algeria 
+
 ### 1.3 Relengthen Data:
 
 ```r
@@ -187,7 +189,7 @@ Email <- email %>%
   select(name=guest,email) %>%
  mutate(name=trimws(name, "both"))
 
-## There is a white space in Email dataset 
+## There is a white space in Email dataset, removed this 
 ```
 
 ## 3.1 Add Emails for Each Guest on List:
@@ -220,7 +222,7 @@ print(guest_emails)
 
 ## 3.2 Emails but not on Guest List
 
-The names of peoples with emails but are not on guest list:
+The names of peoples with emails but are not on the guest list:
 
 
 ```r
@@ -267,8 +269,9 @@ print(guest_emails)
 ## #   attendance_golf <chr>
 ```
 
-There are 5 guests who don't have emails in the email tibble. Let's find out who those 5 guests are: 
-### 5 Guests on original guest list without any email
+There are 5 guests who don't have emails in the email tibble but are on the guest list. 
+
+### Let's find out who the five guests on the guest list that don't have emails are : 
 
 ```r
 guest_emails%>%
@@ -287,4 +290,4 @@ guest_emails%>%
 ## 5 Cai …    11 fish         Menu C      CONFIRMED        CONFIRMED       
 ## # … with 1 more variable: attendance_golf <chr>
 ```
-
+These 5 do not have a corresponding email in the email tibble. 
