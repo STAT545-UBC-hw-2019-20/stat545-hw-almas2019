@@ -1,0 +1,101 @@
+---
+title: "Assignment 04: Tidy data and joins"
+author: "Almas K."
+date: '2019-10-07'
+output:
+  html_document:
+    keep_md: TRUE
+---
+
+---
+```{r load, warning=FALSE,echo=FALSE}
+suppressPackageStartupMessages(library(tidyverse)) 
+suppressPackageStartupMessages(library(gapminder))
+```
+
+# Exercise 1: Univariate Data Reshaping
+
+## Univariate Option 1:Life Expectancy vs Year
+
+### 1.1 Data in Wider Format
+Let's choose 2 other countries to compare to Canada 
+```{r}
+gapwide <- gapminder %>% 
+  filter((country=="Algeria")|(country=="Bahrain")|(country=="Canada")) %>%
+  pivot_wider(id_cols= year, 
+              names_from= country,
+              values_from = lifeExp)
+print(gapwide)
+```
+### 1.2 Scatter Plot for 2 countries against each other:
+
+Let's choose Algeria and Bahrain to plot against each other.
+```{r}
+gapwide %>%
+  ggplot(aes(x=Algeria, y=Bahrain))+
+  geom_point()
+```
+
+### 1.3 Relengthen Data:
+```{r}
+gapwide %>%
+  pivot_longer(cols = c(-year),
+               names_to = "Country",
+               values_to="Life Expectancy")
+               
+```
+
+# Excercise 2: Multivariate Data Reshaping:
+
+## Multivariate Option 1: Life Expectancy-Gdp
+
+### 2.1 Wide Tibble
+```{r}
+gap_mulit_wide <- gapminder %>%
+filter(country== "Australia"| country == "Bahrain") %>%
+  pivot_wider(id_cols = year,
+              names_from = country,
+              values_from = c(lifeExp,gdpPercap))
+print(gap_mulit_wide)
+```
+
+### 2.2 Relengthen Data:
+```{r}
+gap_mulit_wide %>%
+  pivot_longer(cols=c(-year),
+               names_to = c(".value", "country"),
+               names_sep = "_")
+
+## .value separates values for the measures of lifeExp and gdpPerCap
+```
+
+# Excercise 3.0 Table Joins:
+
+### Loading the guest and email data
+```{r}
+guest <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/attend.csv")
+email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/emails.csv")
+```
+###  3.1.1 First Edit email csv:
+Each guest should on one line for each email and guest field changed to name to make it easier to join
+```{r}
+email <- email %>%
+  separate_rows(email,guest, sep = ",") %>%
+  select(name=guest,email) 
+```
+
+## 3.1 Add Emails for Each Guest on List
+```{r}
+guest_emails <- 
+inner_join(guest,email) %>%
+print(guest)
+  
+```
+
+## 3.2 Emails but not on Guest List
+```{r}
+guest_emails %>% 
+  select(email) %>%
+  diff(.,email$email)
+```
+
