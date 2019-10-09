@@ -24,10 +24,11 @@ gapwide <- gapminder %>%
   filter((country=="Algeria")|(country=="Bahrain")|(country=="Canada")) %>%
   pivot_wider(id_cols= year, 
               names_from= country,
-              values_from = lifeExp) %>%
-print(gapwide) 
-  
+              values_from = lifeExp) 
+  gapwide %>%
+    DT::datatable()
 ```
+
 ### 1.2 Scatter Plot for 2 countries against each other:
 
 Let's choose Algeria and Bahrain to plot against each other.
@@ -35,6 +36,7 @@ Let's choose Algeria and Bahrain to plot against each other.
 gapwide %>%
   ggplot(aes(x=Algeria, y=Bahrain))+
   geom_point()+
+  labs(title="Scatter Plot of Bahrain's Life Expectancy vs Algeria's Life Expectancy",x="Algeria(Years)",y="Bahrain(Years)")+
   theme_bw()
 ```
 
@@ -45,7 +47,8 @@ Over time, life Expectancy of Bahrain is higher compared to Algeria
 gapwide %>%
   pivot_longer(cols = c(-year),
                names_to = "Country",
-               values_to="Life Expectancy")
+               values_to="Life Expectancy") %>%
+  DT::datatable()
                
 ```
 
@@ -60,7 +63,7 @@ filter(country== "Australia"| country == "Bahrain") %>%
   pivot_wider(id_cols = year,
               names_from = country,
               values_from = c(lifeExp,gdpPercap))
-print(gap_mulit_wide) 
+gap_mulit_wide %>% knitr::kable()
 ```
 
 ### 2.2 Relengthen Data:
@@ -68,7 +71,8 @@ print(gap_mulit_wide)
 gap_mulit_wide %>%
   pivot_longer(cols=c(-year),
                names_to = c(".value", "country"),
-               names_sep = "_")
+               names_sep = "_") %>%
+  knitr::kable()
 
 ## .value separates values for the measures of lifeExp and gdpPerCap
 ```
@@ -80,7 +84,7 @@ gap_mulit_wide %>%
 guest <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/attend.csv")
 email <- read_csv("https://raw.githubusercontent.com/STAT545-UBC/Classroom/master/data/wedding/emails.csv")
 ```
-###  3.1.1 First Edit email csv:
+###  3.01 First Edit email csv:
 Each guest should on one line for each email and guest field changed to name to make it easier to join
 
 ```{r}
@@ -98,8 +102,9 @@ Assumption: Only including guests from guest list who have a corresponding email
  (no additonal emails, no additional guests):
 ```{r}
 guest_emails <- Email %>%
-  inner_join(guest,Email, by="name") %>%
-print(guest_emails)
+  inner_join(guest,Email, by="name")
+
+guest_emails %>% DT::datatable()
 ```
 
 ## 3.2 Emails but not on Guest List
@@ -109,27 +114,33 @@ The names of peoples with emails but are not on the guest list:
 ```{r}
 guest_emails %>%
   select(name,email) %>%
-  setdiff(Email,.)
+  setdiff(Email,.) %>%
+  knitr::kable()
 ```
+
+These 3 are not found in the guest dataset. 
 
 ## 3.3 Guest List for all those that we have emails for:
 
-A new guest list with names of people on the original guest list with emails and those not on the original guest list who also have emails 
+A new guest list with names of people on the original guest list with emails and those not on the original guest list who also have emails (found on email dataset but not guest dataset)
 
 ```{r}
-guest_all_emails <- Email %>%
+Email %>%
   left_join(guest,Email, by="name") %>%
-print(guest_emails)
+DT::datatable() 
 ```
 
-There are 5 guests who don't have emails in the email tibble but are on the guest list. 
+ 
 
-###Extra Analysis:
+### 3--Extra Analysis:
+There are 5 guests who don't have emails in the email dataset.  These are the ones that don't have a corresponding email in the email tibble but are found on the guest list (guest dataset)
 
 Let's find out who the five guests on the guest list that don't have emails are : 
 ```{r}
 guest_emails%>%
   select(-email) %>%
-  setdiff(guest,.)
+  setdiff(guest,.) %>%
+  knitr::kable()
 ```
-These are the ones that don't have a corresponding email in the email tibble. 
+
+
