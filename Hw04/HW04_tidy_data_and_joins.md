@@ -23,7 +23,7 @@ gapwide <- gapminder %>%
   pivot_wider(id_cols= year, 
               names_from= country,
               values_from = lifeExp) %>%
-print(gapwide)
+print(gapwide) 
 ```
 
 ```
@@ -96,7 +96,7 @@ filter(country== "Australia"| country == "Bahrain") %>%
   pivot_wider(id_cols = year,
               names_from = country,
               values_from = c(lifeExp,gdpPercap))
-print(gap_mulit_wide)
+print(gap_mulit_wide) 
 ```
 
 ```
@@ -194,7 +194,8 @@ Email <- email %>%
 
 ## 3.1 Add Emails for Each Guest on List:
 
-Including emails only for those on the guest dataset (no additonal emails):
+Assumption: Only including guests from guest list who have a corresponding email from the email tibble: 
+ (no additonal emails, no additional guests):
 
 ```r
 guest_emails <- Email %>%
@@ -271,7 +272,9 @@ print(guest_emails)
 
 There are 5 guests who don't have emails in the email tibble but are on the guest list. 
 
-### Let's find out who the five guests on the guest list that don't have emails are : 
+###Extra Analysis:
+
+Let's find out who the five guests on the guest list that don't have emails are : 
 
 ```r
 guest_emails%>%
@@ -290,4 +293,4 @@ guest_emails%>%
 ## 5 Cai …    11 fish         Menu C      CONFIRMED        CONFIRMED       
 ## # … with 1 more variable: attendance_golf <chr>
 ```
-These 5 do not have a corresponding email in the email tibble. 
+These are the ones that don't have a corresponding email in the email tibble. 

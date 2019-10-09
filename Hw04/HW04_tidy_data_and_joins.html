@@ -198,7 +198,7 @@ summary {
   pivot_wider(id_cols= year, 
               names_from= country,
               values_from = lifeExp) %&gt;%
-print(gapwide)</code></pre>
+print(gapwide) </code></pre>
 <pre><code>## # A tibble: 12 x 4
 ##     year Algeria Bahrain Canada
 ##    &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;
@@ -259,7 +259,7 @@ filter(country== &quot;Australia&quot;| country == &quot;Bahrain&quot;) %&gt;%
   pivot_wider(id_cols = year,
               names_from = country,
               values_from = c(lifeExp,gdpPercap))
-print(gap_mulit_wide)</code></pre>
+print(gap_mulit_wide) </code></pre>
 <pre><code>## # A tibble: 12 x 5
 ##     year lifeExp_Austral… lifeExp_Bahrain gdpPercap_Austr… gdpPercap_Bahra…
 ##    &lt;int&gt;            &lt;dbl&gt;           &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;
@@ -334,7 +334,7 @@ print(gap_mulit_wide)</code></pre>
 </div>
 <div id="add-emails-for-each-guest-on-list" class="section level2">
 <h2>3.1 Add Emails for Each Guest on List:</h2>
-<p>Including emails only for those on the guest dataset (no additonal emails):</p>
+<p>Assumption: Only including guests from guest list who have a corresponding email from the email tibble: (no additonal emails, no additional guests):</p>
 <pre class="r"><code>guest_emails &lt;- Email %&gt;%
   inner_join(guest,Email, by=&quot;name&quot;) %&gt;%
 print(guest_emails)</code></pre>
@@ -389,8 +389,9 @@ print(guest_emails)</code></pre>
 ## # … with 18 more rows, and 2 more variables: attendance_brunch &lt;chr&gt;,
 ## #   attendance_golf &lt;chr&gt;</code></pre>
 <p>There are 5 guests who don’t have emails in the email tibble but are on the guest list.</p>
-<div id="lets-find-out-who-the-five-guests-on-the-guest-list-that-dont-have-emails-are" class="section level3">
-<h3>Let’s find out who the five guests on the guest list that don’t have emails are :</h3>
+<div id="extra-analysis" class="section level3">
+<h3>Extra Analysis:</h3>
+<p>Let’s find out who the five guests on the guest list that don’t have emails are :</p>
 <pre class="r"><code>guest_emails%&gt;%
   select(-email) %&gt;%
   setdiff(guest,.)</code></pre>
@@ -403,7 +404,7 @@ print(guest_emails)</code></pre>
 ## 4 Cosm…    10 PENDING      PENDING     PENDING          PENDING         
 ## 5 Cai …    11 fish         Menu C      CONFIRMED        CONFIRMED       
 ## # … with 1 more variable: attendance_golf &lt;chr&gt;</code></pre>
-<p>These 5 do not have a corresponding email in the email tibble.</p>
+<p>These are the ones that don’t have a corresponding email in the email tibble.</p>
 </div>
 </div>
 </div>
