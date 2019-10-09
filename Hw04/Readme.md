@@ -1,6 +1,5 @@
-This HW relates to Tidy Data and Joins(for tables)
-
-This HW uses the gapminder dataset, for more info about this dataset see Readme for HW3. 
+This HW relates to Tidy Data and Joins(for tables). 
+It uses the gapminder dataset, for more info about this dataset see Readme for HW3. 
 
 There are 3 main components of this assignment are:
 1. Univariate data reshaping
