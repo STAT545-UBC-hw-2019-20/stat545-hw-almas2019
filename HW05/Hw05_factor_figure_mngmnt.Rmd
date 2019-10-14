@@ -1,0 +1,10 @@
+---
+title: "Assignment 05: Factor and figure management"
+author: "Almas K."
+date: '2019-10-14'
+output:
+  html_document:
+    keep_md: TRUE
+---
+
+
