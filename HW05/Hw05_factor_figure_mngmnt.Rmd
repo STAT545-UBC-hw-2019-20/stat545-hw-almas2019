@@ -7,4 +7,109 @@ output:
     keep_md: TRUE
 ---
 
+```{r load, warning=FALSE,echo=FALSE}
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(gapminder))
+suppressPackageStartupMessages(library(forcats))
+suppressPackageStartupMessages(library(here))
+
+```
+
+# Exercise 1: Explain the value of the here::here package
+
+
+The main value of the here::here package is based on the principle of reproducibility. It also allows the user to run their scripts in a platform agnostic manner and share scripts with others. The advantages of this package can be seen by comparing it to the commonly discouraged alternative setwd().Setwd relies on paths that are user specified but also very user , computer and time specific. Here::here on the other hand uses a specified order (or heuristics) to find the root directory, and thus for any computer it is run on, the correct path will be found.
+
+ In Summary here::here:
+
+1. Allows better collaboration and allows others to view and run your scripts on different platforms and not rely on user specific paths
+
+2. Makes it easier to set paths without running into errors commonly seen when you use absolute or relative paths: 
+  * if you use setwd with an absolute paths, you run the risk of not being able to run the script on another computer, at a different time, OS, or outside of R studio
+  
+* setwd is very specific to the user but here::here avoids this issue by using  an ordered method/set of directives that help it locate the root directory : 
+    1) .here file(that it creates) --> if it can't find this then:
+    2)  .Rproj --> if it can't find this then:
+    3) looks for other file formats --> if it can't find these then:
+    4) working directory as last resort
+  
+3. With these clear advantages in reproducibility, you can see its value!  
+  
+# Excercise 2: Factor Management- Using Gapminder:
+
+We will be using the gapminder data set to explore factor management:
+
+
+## 2.1 Drop Oceania:
+
+### 2.1.1 Before the Drop:
+
+Lets look at the factors in gapminder again before dropping Oceania 
+```{r}
+gapminder$continent %>% 
+  levels()
+
+gapminder$continent %>%
+  nlevels 
+
+gapminder %>% 
+  str()
+
+gapminder %>% 
+  DT::datatable()
+## this shows us 1704 rows and 
+
+```
+
+We see there are 5 levels in continent and 142 levels in country. There are 1704 rows 
+
+### 2.1.2 After Dropping Oceania:
+```{r}
+gap_no_ocean <- gapminder %>%
+  filter(!(continent=="Oceania")) 
+str(gap_no_ocean) 
+
+## Before dropping the unusued levels we see 142 levels in country and 5 levels in continent, but we have a lost continent, that's not right!
+
+gap_no_ocean <- gap_no_ocean %>%
+  droplevels()
+str(gap_no_ocean)
+
+## Second time after dropping
+```
+As you can see the number of levels in continent dropped to 4, and number of countries dropped to 140 after removing the levels. Number of rows in both datasets was 1680, which is less than the original 1704. 
+
+## 2.2 Reorder factors
+
+Lets reorder our factor of country based on maximum gdp Per Capita. or weighted mean of lifeExp given population.
+
+
+### 2.2.1 Reorder the factor and plot before and after the reordering
+```{r}
+gapminder %>%
+  ggplot() +
+  geom_bar(aes(continent))+
+  coord_flip()+
+  theme_bw() +
+ ylab("Number of entries") + xlab("Continent") +
+   ggtitle("Alphabetically Ordered-Before Reordering")
+
+gapminder %>%
+  ggplot() +
+  geom_bar(aes(fct_reorder(continent,gdpPercap,max)))+ 
+  coord_flip()+
+  theme_bw() +
+  ylab("Number of entries") + xlab("Continent") +
+  ggtitle("Ordered based on Maximum GDP per Continent")
+
+## A check to see if the arrangement makes sense
+gapminder %>%
+  group_by(continent) %>%
+  summarize(maxgdp=max(gdpPercap)) %>%
+  arrange(desc(maxgdp))
+
+## Plot follows this in decending order
+```
+
+### 2.2.3 Comparing to arrange:
 
