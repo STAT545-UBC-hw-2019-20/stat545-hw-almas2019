@@ -279,6 +279,7 @@ gapminder%>%
   geom_density() +
    facet_wrap(. ~continent) 
 
+## Peer reviewer recommended a density ridge, it makes comparing the spread much easier than facet wrapping it. 
 ##
 gapminder%>%
   ggplot(aes(y=continent,x=gdpPercap)) +
@@ -286,34 +287,5 @@ gapminder%>%
   ggridges::geom_density_ridges(aes(y=continent))
 
 
-gapminder %>%
-  group_by(year) %>%
-  mutate(median_lifeExp=median(lifeExp)) %>%
-  ungroup(year) %>%
-  mutate(less_than_median= if_else(lifeExp<median_lifeExp,TRUE,FALSE)) %>%
-  filter (less_than_median==TRUE) %>%
-  group_by(continent,year,less_than_median) %>%
-  summarize(n_less_than_median=sum(less_than_median)) %>%
-  ggplot(aes(x=year, y=n_less_than_median,group=continent))+
-  geom_bar(aes(fill=continent),position="dodge",stat="identity")+
-  ylab("Number less than Median")
-
-median_gap <- gapminder %>%
-  group_by(year) %>%
-  mutate(median_lifeExp=median(lifeExp)) %>%
-  ungroup(year) %>%
-  mutate(less_than_median= if_else(lifeExp<median_lifeExp,TRUE,FALSE)) %>%
-  filter (less_than_median==TRUE) %>%
-  group_by(continent,year,less_than_median) %>%
-  summarize(n_less_than_median=sum(less_than_median))
-
- ggplot(median_gap, aes( y=n_less_than_median,x=continent,fill=year))+
- geom_dotplot(binaxis='y', stackdir='center',
-               stackratio=1.5, dotsize=1.2, ) +
-  ylab("Number less than Median")
-
-
 ```
-
-
 # 5.0 Save Visualization 
