@@ -12,6 +12,8 @@ suppressPackageStartupMessages(library(tidyverse))
 suppressPackageStartupMessages(library(gapminder))
 suppressPackageStartupMessages(library(forcats))
 suppressPackageStartupMessages(library(here))
+suppressPackageStartupMessages(library(SDMTools))
+
 
 ```
 
@@ -69,7 +71,7 @@ gap_no_ocean <- gapminder %>%
   filter(!(continent=="Oceania")) 
 str(gap_no_ocean) 
 
-## Before dropping the unusued levels we see 142 levels in country and 5 levels in continent, but we have a lost continent, that's not right!
+## Before dropping the unusued levels we see 142 levels in country and 5 levels in continent, that's not right! We have a lost continent, so we need to drop some levels.
 
 gap_no_ocean <- gap_no_ocean %>%
   droplevels()
@@ -81,35 +83,237 @@ As you can see the number of levels in continent dropped to 4, and number of cou
 
 ## 2.2 Reorder factors
 
-Lets reorder our factor of country based on maximum gdp Per Capita. or weighted mean of lifeExp given population.
+Lets reorder our factor of country based on maximum gdp Per Capita.
 
 
-### 2.2.1 Reorder the factor and plot before and after the reordering
+### 2.2.1 Plots Before Reordering 
 ```{r}
 gapminder %>%
   ggplot() +
-  geom_bar(aes(continent))+
+  geom_col(aes(continent,max(gdpPercap)))+
   coord_flip()+
   theme_bw() +
- ylab("Number of entries") + xlab("Continent") +
-   ggtitle("Alphabetically Ordered-Before Reordering")
+ ylab("GDP Per Captial") + xlab("Continent") +
+   ggtitle("Before Reordering")
 
+## Use a boxplot to visualized the spread and max gdp's we expect to see
 gapminder %>%
-  ggplot() +
-  geom_bar(aes(fct_reorder(continent,gdpPercap,max)))+ 
-  coord_flip()+
+  ggplot(aes(continent,gdpPercap))+
+  geom_boxplot()+
   theme_bw() +
-  ylab("Number of entries") + xlab("Continent") +
-  ggtitle("Ordered based on Maximum GDP per Continent")
+  scale_y_log10()+
+ ylab("GDP Per Capita") + xlab("Continent") +
+   ggtitle("Before Reordering")
 
-## A check to see if the arrangement makes sense
-gapminder %>%
+
+```
+
+Based on the boxplot we predict that we will see Asia as the highest max gdp (upper most whisker) and Africa as the lowest max gdp (upper most whisker is smaller here)
+
+Now let's create plots based on rearranging the data for each continent based on max gdp and let's also directly plot the rearranged max gdp table and see if our plot is ordered in the same order as the table.
+### 2.2.3 Creating the arranged table and plotting it 
+```{r}
+## Let's find the maximum gdp per continent and arranged by those
+arranged_gdp <- gapminder %>%
   group_by(continent) %>%
   summarize(maxgdp=max(gdpPercap)) %>%
   arrange(desc(maxgdp))
 
-## Plot follows this in decending order
+arranged_gdp %>% knitr::kable()
+
+arranged_gdp %>%
+  ggplot() +
+  geom_col(aes(continent,maxgdp))+
+  coord_flip()+
+  theme_bw() +
+  ylab( "GDP per Capita") + xlab("Continent") +
+  ggtitle("Using Arrange")
+
 ```
 
-### 2.2.3 Comparing to arrange:
+As you can see the continents are not in the order of max gdp per Capita that they are presented in. They are instead in alphabetical order. Arrange therefore does not affect the plotting or reorder the levels.
 
+What about if we use fct_reorder?
+
+### 2.2.4 Plotting using the fct_reorder(forcats)
+```{r}
+
+## plot_oder_max_gdp is in the same order as the grouped and arranged table aka arranged_gap
+
+plot_order_max_gdp <- arranged_gdp %>%
+  ggplot() +
+  geom_col(aes(y=maxgdp, x=fct_reorder(continent,maxgdp)))+ 
+  coord_flip()+
+  theme_bw() +
+  ylab("GDP per Capita") + xlab("Continent") +
+  ggtitle("Ordered based on Maximum GDP per Continent")
+plot_order_max_gdp
+
+ 
+
+## https://ggplot2.tidyverse.org/reference/geom_bar.html Ref for geom_col
+## https://stat545.com/factors-boss.html --> learned how to plot bar graphs
+## https://cmdlinetips.com/2019/02/how-to-reorder-a-boxplot-in-r/ how to reorder a boxplot
+
+```
+
+The plot is ordered correctly based on maximum gdp when factor reorder was used. Interesting notes about the plot: max gdp is highest in Asia, lowest in Africa
+
+### 2.2.5 Comparing the order of levels from fct_reorder and arrange
+
+```{r}
+## Before Reordering
+levels(arranged_gdp$continent)
+
+##Using Factor Reorder
+arranged_gdp$continent <- fct_reorder(arranged_gdp$continent,arranged_gdp$maxgdp)
+levels(arranged_gdp$continent)
+```
+
+As you can see arrange only changes how they are viewed in a table, while fct_reorder actually changes the order of the levels in the factor, as seen in both the plot and the levels() function ,in this case in ascending order from left to right from smallest to greatest maximal gdp(ascending order). On the other hand, the original arranged_gdp levels are in alphabetical order.
+
+# Exercise 3:File Input/output (I/O)
+
+## 3.1 Create and Save New Data Set
+
+### 3.1.1 Create a new dataset using Gapminder
+
+Let's create a data set that stores the year, continent and the weighted mean of gdp per Capita with population, weighted standard deviation, and mean and sd life Expectancy. 
+```{r}
+
+gap_wtgdp_meanlife <- gapminder %>%
+  group_by(continent) %>%
+  summarize(wt.mean(gdpPercap,pop),wt.sd(gdpPercap,pop),mean(lifeExp),sd(lifeExp))
+
+gap_wtgdp_meanlife
+
+## Used SDMTools Package
+```
+
+### 3.1.2 Save Dataset 
+```{r}
+write_csv(gap_wtgdp_meanlife,here("Hw05","Gapminder_WT_GDP_Mean_Life.csv"))
+```
+
+## 3.2 Reading in and Playing with Factors
+
+### 3.2.1 Reading in and Viewing the Previously Saved Dataset
+```{r}
+Gapminder_read_in <- read_csv(here("HW05","Gapminder_WT_GDP_Mean_Life.csv")) 
+```
+After reading in using the default setting read_csv setting, the factor continent has changed to a class of type character, 
+
+### 3.2.2 Converting to factor
+```{r}
+## Let's convert continent back into a factor first
+Gapminder_read_in$continent <- as_factor(Gapminder_read_in$continent)
+class(Gapminder_read_in$continent)
+
+```
+### 3.2.3 Exploring Factor Rearrangement by Weighted GDP per Capita
+```{r}
+##  Let's reorder our factors, first by the weighted gdp Per Capita
+
+## First let's try if just using fct_reorder is enough for the table:
+Gapminder_read_in$continent <- fct_reorder(Gapminder_read_in$continent,Gapminder_read_in$`wt.mean(gdpPercap, pop)`)
+
+Gapminder_read_in
+## No
+
+## Have to use arrange
+gapreadin_wt<- Gapminder_read_in %>%
+  arrange(desc(`wt.mean(gdpPercap, pop)`))
+gapreadin_wt
+
+
+
+gapreadin_wt %>%
+  ggplot() +
+  geom_col(aes(y=`wt.mean(gdpPercap, pop)`, x=fct_reorder(continent,`wt.mean(gdpPercap, pop)`)))+ 
+  coord_flip()+
+  theme_bw() +
+  ylab("Weighted GDP per Capita") + xlab("Continent") +
+  ggtitle("Ordered based on Weighted by Population- GDP per Continent")
+```
+Learned that using fct_reorder does not arrange the factors in the correct order in a table, arrange is what you have to use. Interestingly Oceania has highest weighted GDP per capita whereas Asia and Africa are lower. 
+
+## 3.2.3 Let's Explore Some other rearrangements:
+```{r}
+## sd gdp per capita
+gapreadin_sd_wtgdp<- Gapminder_read_in %>%
+  arrange(desc(`wt.sd(gdpPercap, pop)`))
+gapreadin_sd_wtgdp
+
+
+gapreadin_sd_wtgdp %>%
+  ggplot() +
+  geom_col(aes(y=`wt.sd(gdpPercap, pop)`, x=fct_reorder(continent,`wt.sd(gdpPercap, pop)`)))+ 
+  coord_flip()+
+  theme_bw() +
+  ylab("Weighted Standard Deviation of GDP per Capita") + xlab("Continent") +
+  ggtitle("Ordered based on Standard Deviation of Weighted by Population- GDP per Continent")
+
+## sd of mean Life Expectancy
+gapreadin_sd_lifeExp<- Gapminder_read_in %>%
+  arrange(desc(`sd(lifeExp)`))
+gapreadin_sd_lifeExp
+
+
+gapreadin_sd_lifeExp %>%
+  ggplot() +
+  geom_col(aes(y=`sd(lifeExp)`, x=fct_reorder(continent,`sd(lifeExp)`)))+ 
+  coord_flip()+
+  theme_bw() +
+  ylab("Standard Deviation of Life Expectancy") + xlab("Continent") +
+  ggtitle("Ordered based on Standard Deviation of Life Expectancy By Continent")
+```
+
+# 4.0 Visualization
+
+## 
+
+```{r}
+## Original
+gapminder%>%
+  ggplot(aes(x=log(gdpPercap))) +
+  geom_density() +
+   facet_wrap(. ~continent) 
+
+##
+gapminder%>%
+  ggplot(aes(y=continent,x=gdpPercap)) +
+  scale_x_log10()+
+  ggridges::geom_density_ridges(aes(y=continent))
+
+
+gapminder %>%
+  group_by(year) %>%
+  mutate(median_lifeExp=median(lifeExp)) %>%
+  ungroup(year) %>%
+  mutate(less_than_median= if_else(lifeExp<median_lifeExp,TRUE,FALSE)) %>%
+  filter (less_than_median==TRUE) %>%
+  group_by(continent,year,less_than_median) %>%
+  summarize(n_less_than_median=sum(less_than_median)) %>%
+  ggplot(aes(x=year, y=n_less_than_median,group=continent))+
+  geom_bar(aes(fill=continent),position="dodge",stat="identity")+
+  ylab("Number less than Median")
+
+median_gap <- gapminder %>%
+  group_by(year) %>%
+  mutate(median_lifeExp=median(lifeExp)) %>%
+  ungroup(year) %>%
+  mutate(less_than_median= if_else(lifeExp<median_lifeExp,TRUE,FALSE)) %>%
+  filter (less_than_median==TRUE) %>%
+  group_by(continent,year,less_than_median) %>%
+  summarize(n_less_than_median=sum(less_than_median))
+
+ ggplot(median_gap, aes( y=n_less_than_median,x=continent,fill=year))+
+ geom_dotplot(binaxis='y', stackdir='center',
+               stackratio=1.5, dotsize=1.2, ) +
+  ylab("Number less than Median")
+
+
+```
+
+
+# 5.0 Save Visualization 
