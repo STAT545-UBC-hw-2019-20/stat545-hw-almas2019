@@ -83,7 +83,7 @@ As you can see the number of levels in continent dropped to 4, and number of cou
 
 ## 2.2 Reorder factors
 
-Lets reorder our factor of country based on maximum gdp Per Capita.
+Lets reorder our factor of country from Gapminder based on maximum gdp Per Capita.
 
 
 ### 2.2.1 Plots Before Reordering 
@@ -93,7 +93,8 @@ gapminder %>%
   geom_col(aes(continent,max(gdpPercap)))+
   coord_flip()+
   theme_bw() +
- ylab("GDP Per Captial") + xlab("Continent") +
+  scale_y_continuous(labels=scales::comma)+
+ ylab("GDP Per Capita") + xlab("Continent") +
    ggtitle("Before Reordering")
 
 ## Use a boxplot to visualized the spread and max gdp's we expect to see
@@ -101,8 +102,8 @@ gapminder %>%
   ggplot(aes(continent,gdpPercap))+
   geom_boxplot()+
   theme_bw() +
-  scale_y_log10()+
- ylab("GDP Per Capita") + xlab("Continent") +
+  scale_y_log10(labels=scales::comma)+
+ ylab("log GDP Per Capita") + xlab("Continent") +
    ggtitle("Before Reordering")
 
 
@@ -283,9 +284,38 @@ gapminder%>%
 ##
 gapminder%>%
   ggplot(aes(y=continent,x=gdpPercap)) +
-  scale_x_log10()+
-  ggridges::geom_density_ridges(aes(y=continent))
+  scale_x_log10(labels=scales::comma)+
+  ggridges::geom_density_ridges(aes(y=continent))+
+  labs(title="Spread of GDP per Capita of Different Continents")+
+  xlab("log of GDP per Capita")
+ 
+
+gap_median <- gapminder %>%
+  group_by(year) %>%
+  mutate(median_lifeExp=median(lifeExp)) %>%
+  ungroup(year) %>%
+  mutate(less_than_median= if_else(lifeExp<median_lifeExp,TRUE,FALSE)) %>%
+  filter (less_than_median==TRUE) %>%
+  group_by(continent,year,less_than_median) %>%
+  summarize(n_less_than_median=sum(less_than_median)) 
+
+gap_median %>%
+  ggplot(aes(x=year, y=n_less_than_median,group=continent))+
+  geom_bar(aes(fill=continent),position="dodge",stat="identity")+
+  ylab("Number less than Median")
+
+gap_median %>%
+  ggplot(aes(x=year, y=n_less_than_median,group=continent))+
+  geom_col(fill="light blue")+
+  ylab("Number of Countries > Median Life Expectancy")+
+  facet_wrap(.~continent)+
+  theme_bw() ## add more breaks, use 1952
+## Greed arrange function 
 
 
 ```
-# 5.0 Save Visualization 
+
+# 5.0 Save Visualizations
+
+## 5.1 Let's save the median visualiat
+
