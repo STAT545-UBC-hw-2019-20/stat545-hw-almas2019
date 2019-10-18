@@ -13,6 +13,7 @@ suppressPackageStartupMessages(library(gapminder))
 suppressPackageStartupMessages(library(forcats))
 suppressPackageStartupMessages(library(here))
 suppressPackageStartupMessages(library(SDMTools))
+suppressPackageStartupMessages(library(ggpubr))
 
 
 ```
@@ -57,10 +58,6 @@ gapminder$continent %>%
 gapminder %>% 
   str()
 
-gapminder %>% 
-  DT::datatable()
-## this shows us 1704 rows and 
-
 ```
 
 We see there are 5 levels in continent and 142 levels in country. There are 1704 rows 
@@ -79,6 +76,9 @@ str(gap_no_ocean)
 
 ## Second time after dropping
 ```
+
+See comment within code regarding before dropping levels.
+
 As you can see the number of levels in continent dropped to 4, and number of countries dropped to 140 after removing the levels. Number of rows in both datasets was 1680, which is less than the original 1704. 
 
 ## 2.2 Reorder factors
@@ -112,6 +112,7 @@ gapminder %>%
 Based on the boxplot we predict that we will see Asia as the highest max gdp (upper most whisker) and Africa as the lowest max gdp (upper most whisker is smaller here)
 
 Now let's create plots based on rearranging the data for each continent based on max gdp and let's also directly plot the rearranged max gdp table and see if our plot is ordered in the same order as the table.
+
 ### 2.2.3 Creating the arranged table and plotting it 
 ```{r}
 ## Let's find the maximum gdp per continent and arranged by those
@@ -132,7 +133,7 @@ arranged_gdp %>%
 
 ```
 
-As you can see the continents are not in the order of max gdp per Capita that they are presented in. They are instead in alphabetical order. Arrange therefore does not affect the plotting or reorder the levels.
+The continents are arranged correctly by max gdp in the table but not on the plot. They are instead in alphabetical order on the plot. Arrange therefore does not affect the plotting or reorder the levels.
 
 What about if we use fct_reorder?
 
@@ -179,7 +180,7 @@ As you can see arrange only changes how they are viewed in a table, while fct_re
 
 ### 3.1.1 Create a new dataset using Gapminder
 
-Let's create a data set that stores the year, continent and the weighted mean of gdp per Capita with population, weighted standard deviation, and mean and sd life Expectancy. 
+Let's create a data set that stores the continent and the weighted mean of gdp per Capita with population, weighted standard deviation, and mean and sd of life Expectancy. 
 ```{r}
 
 gap_wtgdp_meanlife <- gapminder %>%
@@ -204,7 +205,7 @@ Gapminder_read_in <- read_csv(here("HW05","Gapminder_WT_GDP_Mean_Life.csv"))
 ```
 After reading in using the default setting read_csv setting, the factor continent has changed to a class of type character, 
 
-### 3.2.2 Converting to factor
+### 3.2.2 Converting Continent back to factor
 ```{r}
 ## Let's convert continent back into a factor first
 Gapminder_read_in$continent <- as_factor(Gapminder_read_in$continent)
@@ -234,8 +235,9 @@ gapreadin_wt %>%
   coord_flip()+
   theme_bw() +
   ylab("Weighted GDP per Capita") + xlab("Continent") +
-  ggtitle("Ordered based on Weighted by Population- GDP per Continent")
+  ggtitle("Ordered based on  GDP per Capita Weighted by Population")
 ```
+
 Learned that using fct_reorder does not arrange the factors in the correct order in a table, arrange is what you have to use. Interestingly Oceania has highest weighted GDP per capita whereas Asia and Africa are lower. 
 
 ## 3.2.3 Let's Explore Some other rearrangements:
@@ -243,8 +245,6 @@ Learned that using fct_reorder does not arrange the factors in the correct order
 ## sd gdp per capita
 gapreadin_sd_wtgdp<- Gapminder_read_in %>%
   arrange(desc(`wt.sd(gdpPercap, pop)`))
-gapreadin_sd_wtgdp
-
 
 gapreadin_sd_wtgdp %>%
   ggplot() +
@@ -252,13 +252,11 @@ gapreadin_sd_wtgdp %>%
   coord_flip()+
   theme_bw() +
   ylab("Weighted Standard Deviation of GDP per Capita") + xlab("Continent") +
-  ggtitle("Ordered based on Standard Deviation of Weighted by Population- GDP per Continent")
+  ggtitle("Ordered based on Standard Deviation of Weighted by Population- GDP")
 
 ## sd of mean Life Expectancy
 gapreadin_sd_lifeExp<- Gapminder_read_in %>%
   arrange(desc(`sd(lifeExp)`))
-gapreadin_sd_lifeExp
-
 
 gapreadin_sd_lifeExp %>%
   ggplot() +
@@ -269,27 +267,75 @@ gapreadin_sd_lifeExp %>%
   ggtitle("Ordered based on Standard Deviation of Life Expectancy By Continent")
 ```
 
+Interesting to note how order changes based on what standard deviation is used. 
+
 # 4.0 Visualization
 
-## 
+In assignment 3, I originally created a facet wrapped side by side histogram to compare spread of gdp Per capita. This made comparing the spreads of different continents with each other a bit more difficult. It also had no title. A peer reviewer recommended using geom_ridge to create a ridge plot. I have done this below.
 
+## 4.1 Spread Plots 
+
+### 4.1.1 Original Density Plot
+Let's view the original 
 ```{r}
 ## Original
-gapminder%>%
+density_gdpPercap <- gapminder%>%
   ggplot(aes(x=log(gdpPercap))) +
   geom_density() +
    facet_wrap(. ~continent) 
+density_gdpPercap
 
-## Peer reviewer recommended a density ridge, it makes comparing the spread much easier than facet wrapping it. 
-##
-gapminder%>%
+```
+
+
+### 4.1.2 New Ridge Plot and both plots side by side 
+
+Let's view an updated ridge plot and compare the both types of plots.
+```{r}
+
+ridge_gdpPercap <- gapminder%>%
   ggplot(aes(y=continent,x=gdpPercap)) +
   scale_x_log10(labels=scales::comma)+
   ggridges::geom_density_ridges(aes(y=continent))+
-  labs(title="Spread of GDP per Capita of Different Continents")+
-  xlab("log of GDP per Capita")
- 
+  xlab("log of GDP per Capita")+
+  theme_bw()
 
+ridge_gdpPercap+
+  ggtitle("Spread of GDP per Capita of Different Continents")
+
+## Plotting side by side 
+density_plots <- ggarrange(density_gdpPercap,ridge_gdpPercap,labels="AUTO") %>%
+annotate_figure(top="Spread of GDP per Capita of Different Continents")
+density_plots
+
+
+## Learned about ggarrange from :http://www.sthda.com/english/wiki/print.php?id=177
+## Common title learned fr. : https://stackoverflow.com/questions/49825971/add-a-common-legend
+```
+
+The ridge plot(B) makes it much easier to compare the spreads of different continents on one plot and makes it easier to see trends compared to the original(A) .
+
+The difference: 
+
+  * Included a title in updated graph
+  * Axes make more sense now
+  * Easier to compare the spread acrross different continents in 1 plot compared to the 5 original
+
+I didn't add a title to the original plot objects before plotting side by side because the objects kept getting cut off. 
+
+
+
+## 4.2 Grouped Bar charts:
+
+Also in assignment 3, I created group bar charts to look at the number of countries that are below the global median.Jenny Bryan mentions that grouped bar charts make it harder to see trends between items that are not close to each other, she does not recommend grouped bar charts on her stat 545 page.
+
+Source: https://stat545.com/effective-graphs.html
+
+### 4.2.1 Create an object of the original code 
+
+This was used to generate the initial graph, it will save typing and make code cleaner to create an object from this code: 
+
+```{r}
 gap_median <- gapminder %>%
   group_by(year) %>%
   mutate(median_lifeExp=median(lifeExp)) %>%
@@ -298,24 +344,76 @@ gap_median <- gapminder %>%
   filter (less_than_median==TRUE) %>%
   group_by(continent,year,less_than_median) %>%
   summarize(n_less_than_median=sum(less_than_median)) 
+```
 
-gap_median %>%
+### 4.2.2 Generate the Original Grouped Bar chart 
+
+```{r}
+grouped_bar <- gap_median %>%
   ggplot(aes(x=year, y=n_less_than_median,group=continent))+
   geom_bar(aes(fill=continent),position="dodge",stat="identity")+
   ylab("Number less than Median")
+grouped_bar
+```
 
-gap_median %>%
+In the case above, yes it is difficult to compare the continents with each other over time. 
+
+### 4.2.3 New Facet Wrapped Bar Chart and Both bar graphs side by side
+
+Claus O. Wilke in his book Fundamentals of Data Visualization also mentions grouped bar charts are confusing and cautions against them. He recommends faceted wrapped bar charts. 
+Source(https://serialmentor.com/dataviz/visualizing-amounts.html#visualizing-amounts)
+
+I followed his recommendation and created a new facet wrap bar chart and then put both bar charts side by side.
+
+```{r}
+facet_wrap_bar <- gap_median %>%
   ggplot(aes(x=year, y=n_less_than_median,group=continent))+
   geom_col(fill="light blue")+
-  ylab("Number of Countries > Median Life Expectancy")+
+  ylab("Number of Countries")+
   facet_wrap(.~continent)+
-  theme_bw() ## add more breaks, use 1952
-## Greed arrange function 
+  theme_bw() 
+facet_wrap_bar +
+   ggtitle("Number of Countries with Less than Median Life Expectancy vs Time")
+
+bar_less_med <- ggarrange(grouped_bar,facet_wrap_bar,labels = c("C","D")) %>%
+  annotate_figure(top="Number of Countries with Less than Median Life Expectancy vs Time")
+bar_less_med
 
 
 ```
 
+Observations: 
+The facet wrapped bar chart(D) makes it much easier to compare the number of countries in each continent over time that was less than the median.It also makes it easier to see trends compared to the original(C),like for example, Africa has the greatest number of countries with less than median over time.Also  Oceania is not present in both graphs, but this is more obvious in D, meaning it has never had a country with less than the median life Expectancy, and other trends are also present. 
+
+The difference: 
+
+  * Included a title in updated graph
+  * Y axis is more clearly labelled 
+  * Easier to compare the numbers acrross different continents when looking at the faceted plots.
+
+
 # 5.0 Save Visualizations
 
-## 5.1 Let's save the median visualiat
+
+Let's save all 4 plots from 4.0 above as one plot. 
+     
+## 5.1.1 Let's Combine the 4 plots Generated in Part 4
+
+```{r}
+
+four_plots <- ggarrange(density_plots,bar_less_med,nrow=2,ncol=1)
+```
+
+## 5.1.2 Let's save all the plots as one big plot
+```{r}
+
+ggsave(here("HW05","Combined_Gapminder_Plots.png"), four_plots,width=10,height=10)
+ 
+```
+
+## 5.1.3 Let's embed this big plot here:
+
+Here are the 4 plots I created in part 4. 
+
+![Combined Gapminder Plots from Part 4](Combined_Gapminder_Plots.png)
 
