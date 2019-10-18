@@ -10,3 +10,5 @@ The 5 main components of this assignment are:
 
 The link to view the html version of the homework can be found here: [HTML Link-HW 5](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-almas2019/HW05/Hw05_factor_figure_mngmnt.html)
 
+The link for the exported plot is here: [Exported Plot](https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-almas2019/blob/master/HW05/Combined_Gapminder_Plots.png)
+
