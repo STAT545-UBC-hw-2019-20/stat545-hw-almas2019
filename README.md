@@ -11,7 +11,7 @@ This is a repository for all my Stat 545A assignments. Stat545A is a course at U
 | [Assignment 4](https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-almas2019/tree/master/HW04) | Tidy data using Pivot longer and pivot wider and joining tables | _completed_|
 | [Assignment 4 HTML](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-almas2019/Hw04/HW04_tidy_data_and_joins.html)| Link to webpage for assignment 4 for viewing HTML | _completed_|
 | [Assignment 5](https://github.com/STAT545-UBC-hw-2019-20/stat545-hw-almas2019/tree/master/HW05) | Factor and Figure Management & File I/O | _completed_|
-| [Assignment 5 HTML](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-almas2019/Hw05/Hw05_factor_figure_mngmnt.html)| Link to webpage for assignment 5 for viewing HTML | _completed_|
+| [Assignment 5 HTML](https://stat545-ubc-hw-2019-20.github.io/stat545-hw-almas2019/HW05/Hw05_factor_figure_mngmnt.html)| Link to webpage for assignment 5 for viewing HTML | _completed_|
 
 ### About Me 
 I am currently in the first year of my MSc in Bioinformatics at UBC where I will be working with placental genomic data. I previously did my BSc at UBC in microbiology and immunology. I look forward to learning more about R. 
